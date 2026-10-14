@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grille d’analyse de référentiel - CCF</title>
+<meta name="description" content="Guide-checklist pour qualifier un référentiel CCF EPS (BAC GT / AEFE, BAC Pro, CAP) : critères bloquants et non bloquants, avis copiable.">
+<meta name="theme-color" content="#0b2559">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{
+  --bg:#eef2f8;--paper:#fff;--ink:#111827;--muted:#4b5563;--line:#9aa3af;--line-soft:#d1d5db;
+  --navy:#0b2559;--navy-2:#16357a;--navy-soft:#e8eef8;--teal:#01b6b8;--ca1:#01b6b8;--ca2:#f28a00;--ca3:#f0385c;--ca4:#8137be;--ca5:#0182db;
+  --nv:#a3120b;--nv-soft:#fbe9e7;--vsc:#9a4a00;--vsc-soft:#fdf0dd;--v:#0b6b3a;--v-soft:#e3f4ea;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.4}
+button,input,select,textarea{font:inherit;color:inherit}
+header.top{background:var(--navy);color:#fff;padding:8px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:20;flex-wrap:wrap;}
+header.top::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:5px;background:linear-gradient(90deg,var(--ca1) 0 20%,var(--ca2) 20% 40%,var(--ca3) 40% 60%,var(--ca4) 60% 80%,var(--ca5) 80% 100%)}
+header.top .logo{width:42px;height:42px;border-radius:9px;flex:none;background:#fff}
+header.top .brand{display:flex;align-items:center;gap:10px}
+header.top h1{font-size:1rem;margin:0;font-weight:700;letter-spacing:.06em}
+header.top .sub{font-size:.72rem;opacity:.85;letter-spacing:.03em}
+header.top nav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap}
+header.top nav a{color:#fff;text-decoration:none;padding:6px 10px;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid transparent}
+header.top nav a.on,header.top nav a:hover{border-bottom-color:var(--teal)}
+main{max-width:1240px;margin:0 auto;padding:22px 16px 16px}
+.sheet{background:var(--paper);border:1px solid var(--line);box-shadow:0 1px 3px rgba(0,0,0,.08);padding:22px 24px;margin-bottom:16px}
+.doc-head{display:grid;grid-template-columns:1fr auto;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:14px}
+.doc-head .inst{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;line-height:1.5}
+.doc-head .inst b{font-size:.82rem}
+.doc-head .title{text-align:right}
+.doc-head .title .t1{font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.doc-head .title .t2{font-size:.78rem;color:var(--muted)}
+.part{background:var(--navy);color:#fff;font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;padding:7px 10px;margin:18px 0 0;display:flex;align-items:center;gap:10px}
+.part .prog{margin-left:auto;font-weight:400;text-transform:none;letter-spacing:0;font-size:.78rem;opacity:.9}
+.rule{border:1px solid var(--line);border-top:0;padding:6px 10px;font-size:.8rem;background:#fafafa}
+.rule.bl{border-left:4px solid var(--nv)}.rule.nb{border-left:4px solid var(--vsc)}
+table.form,table.check,table.crit,table.recap{width:100%;border-collapse:collapse}
+table.form td,table.form th{border:1px solid var(--line);padding:7px 10px;vertical-align:middle;text-align:left}
+table.form th{background:var(--navy-soft);width:200px;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em}
+.opts{display:flex;flex-wrap:wrap;gap:4px 16px}
+.opt{display:inline-flex;align-items:center;gap:6px;cursor:pointer;user-select:none;padding:2px 0;font-size:.9rem}
+.opt .box{width:15px;height:15px;border:1.5px solid var(--ink);display:inline-grid;place-items:center;font-size:12px;line-height:1;flex:none;background:#fff}
+.opt.on .box::after{content:"✕";font-weight:700}
+.opt.on{font-weight:700}
+table.check{margin-top:0;table-layout:fixed}
+table.check col.c-n{width:48px}table.check col.c-cb{width:100px}
+@media (max-width:600px){table.check col.c-n{width:34px}table.check col.c-cb{width:62px}table.check th{font-size:.58rem;padding:4px 2px;letter-spacing:0}table.check td{padding:5px}}
+table.check th{background:#f1f3f6;border:1px solid var(--line);font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;padding:6px;text-align:center}
+table.check td{border:1px solid var(--line);padding:6px 8px;vertical-align:top}
+table.check tr.sub td{background:var(--navy-soft);font-weight:700;font-size:.8rem;color:var(--navy);text-transform:uppercase;letter-spacing:.03em}
+table.check td.n{width:44px;text-align:center;font-weight:700;color:var(--muted);font-size:.8rem}
+table.check td.cb{width:86px;text-align:center;cursor:pointer;vertical-align:middle}
+table.check td.cb:hover{background:#f6f7f9}
+table.check td.cb .box{width:18px;height:18px;border:1.5px solid var(--ink);display:inline-grid;place-items:center;font-weight:700;font-size:14px;line-height:1;background:#fff}
+table.check td.cb.on.ok .box{background:var(--v);border-color:var(--v);color:#fff}
+table.check td.cb.on.ok .box::after{content:"✓"}
+table.check td.cb.on.ko .box::after{content:"✕"}
+table.check td.cb.on.ko.bl .box{background:var(--nv);border-color:var(--nv);color:#fff}
+table.check td.cb.on.ko.nb .box{background:var(--vsc);border-color:var(--vsc);color:#fff}
+table.check tr.ko.bl td.crit .lib{color:var(--nv);font-weight:700}
+table.check tr.ko.nb td.crit .lib{color:var(--vsc);font-weight:700}
+table.check td.crit .obs{display:block;width:100%;border:0;border-bottom:1px dotted var(--line);padding:3px 0 1px;margin-top:4px;font-size:.8rem;background:transparent;color:var(--muted)}
+table.check td.crit .obs:focus{outline:none;border-bottom:1px solid var(--navy);color:var(--ink)}
+.layout{display:grid;grid-template-columns:1fr 390px;gap:16px;align-items:start}
+.side{position:sticky;top:60px}
+@media (max-width:980px){.layout{grid-template-columns:1fr}.side{position:static}}
+@media (max-width:600px){.sheet{padding:14px 12px}.doc-head{grid-template-columns:1fr}.doc-head .title{text-align:left}table.form th{width:auto;display:block;border-bottom:0}table.form td{display:block}table.check td.cb{width:56px}}
+.dec{display:grid;gap:6px;padding:10px;border:1px solid var(--line);border-top:0}
+.dec .d{display:flex;align-items:center;gap:10px;padding:6px 8px;border:1px solid var(--line-soft);font-weight:700;text-transform:uppercase;font-size:.85rem;letter-spacing:.03em;color:var(--muted)}
+.dec .d .box{width:18px;height:18px;border:1.5px solid currentColor;display:inline-grid;place-items:center;font-size:14px}
+.dec .d.on .box::after{content:"✕"}
+.dec .d.on.nv{background:var(--nv-soft);color:var(--nv);border-color:var(--nv)}
+.dec .d.on.vsc{background:var(--vsc-soft);color:var(--vsc);border-color:var(--vsc)}
+.dec .d.on.v{background:var(--v-soft);color:var(--v);border-color:var(--v)}
+table.recap td{border:1px solid var(--line);padding:5px 8px;font-size:.82rem}
+table.recap td.num{width:48px;text-align:center;font-weight:700}
+.boxed{border:1px solid var(--line);border-top:0;padding:10px}
+.btn{border:1px solid var(--ink);background:#fff;padding:7px 14px;cursor:pointer;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+.btn:hover{background:#f3f4f6}
+.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.pri:hover{background:#2a4a80}
+.btn.sm{padding:4px 10px;font-size:.72rem}
+.btn.danger{color:var(--nv);border-color:var(--nv)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted);font-size:.82rem}
+.alert{border:1px solid var(--vsc);background:var(--vsc-soft);padding:6px 10px;font-size:.8rem;margin:8px 0}
+.alert.info{border-color:var(--navy);background:var(--navy-soft)}
+textarea{border:1px solid var(--line);padding:8px 10px;background:#fff;width:100%;resize:vertical;font-family:inherit}
+#avis{min-height:250px;font-size:.84rem;line-height:1.45}
+.empty{text-align:center;padding:26px 10px;color:var(--muted);border:1px dashed var(--line);margin-top:16px}
+.badge{display:inline-block;padding:2px 8px;font-weight:700;font-size:.72rem;border:1px solid currentColor;text-transform:uppercase;letter-spacing:.03em}
+.b-nv{color:var(--nv);background:var(--nv-soft)}.b-vsc{color:var(--vsc);background:var(--vsc-soft)}.b-v{color:var(--v);background:var(--v-soft)}
+h2.h{font-size:1rem;text-transform:uppercase;letter-spacing:.04em;margin:0 0 10px}
+h3.sec{font-size:.85rem;margin:16px 0 6px;color:var(--navy);text-transform:uppercase;letter-spacing:.03em}
+table.crit{font-size:.84rem;margin-bottom:8px}
+table.crit th,table.crit td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.crit th{background:var(--navy-soft);color:var(--navy);font-size:.75rem;text-transform:uppercase}
+.pick{display:flex;gap:6px;flex-wrap:wrap}
+.pick button{border:1px solid var(--ink);background:#fff;padding:6px 12px;cursor:pointer;font-weight:700;font-size:.8rem}
+.pick button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.pick.small button{padding:4px 10px}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;font-size:.78rem;color:var(--muted)}
+.sign div{border-bottom:1px dotted var(--line);padding-bottom:18px}
+.printonly{display:none}
+footer{text-align:center;color:var(--muted);font-size:.72rem;padding:18px;letter-spacing:.03em}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;font-size:.85rem;opacity:0;transition:.25s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+@media print{
+  @page{size:A4;margin:12mm}
+  header.top,footer,.noprint,.toast{display:none!important}
+  body{background:#fff;font-size:9.5pt}
+  main{padding:0;max-width:none}
+  .layout{display:block}
+  .side{position:static;margin-top:10px;page-break-inside:avoid}
+  .sheet{border:0;box-shadow:none;padding:0;margin:0}
+  .printonly{display:block}
+  #avis{display:none}
+  .avis-print{white-space:pre-wrap;border:1px solid var(--line);padding:8px;font-size:9pt}
+  .part,table.check th,table.check tr.sub td,table.form th,table.check td.cb .box,.dec .d{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  table.check tr{page-break-inside:avoid}
+  table.check td.crit .obs{border:0}
+  table.check td.crit .obs:placeholder-shown{display:none}
+}
+
+.pks{display:flex;flex-wrap:wrap;gap:6px}
+.pk{border:1px solid var(--ink);background:#fff;padding:6px 14px;cursor:pointer;font-weight:700;font-size:.85rem;min-height:34px}
+.pk:hover{background:#f3f4f6}
+.pk.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+table.check col.c-yn{width:150px}
+table.check td.yn{vertical-align:middle;text-align:center}
+.ynw{display:inline-flex;border:1px solid var(--ink)}
+.ynw button{border:0;background:#fff;padding:7px 0;width:60px;font-weight:700;font-size:.82rem;cursor:pointer;letter-spacing:.05em}
+.ynw button+button{border-left:1px solid var(--ink)}
+.ynw button:hover{background:#f3f4f6}
+.ynw button.y.on{background:var(--v);color:#fff}
+.ynw button.nn.bl.on{background:var(--nv);color:#fff}
+.ynw button.nn.nb.on{background:var(--vsc);color:#fff}
+table.check tr.ko.bl td.crit .lib{color:var(--nv);font-weight:700}
+table.check tr.ko.nb td.crit .lib{color:var(--vsc);font-weight:700}
+.verdict{margin:10px;padding:14px;text-align:center;font-size:1.3rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;border:2px solid currentColor}
+.verdict.nv{color:var(--nv);background:var(--nv-soft)}.verdict.vsc{color:var(--vsc);background:var(--vsc-soft)}.verdict.v{color:var(--v);background:var(--v-soft)}
+table.adm col.c-act{width:230px}
+table.adm td textarea{font-size:.82rem;min-height:44px}
+table.adm td.act{text-align:center;vertical-align:middle;white-space:nowrap}
+table.adm td.act .btn{margin:2px}
+table.adm tr.add td{background:#fafbfc}
+.btn:disabled{opacity:.35;cursor:default}
+@media (max-width:600px){table.check col.c-yn{width:104px}.ynw button{width:44px;font-size:.75rem}table.adm,table.adm tbody,table.adm tr,table.adm td{display:block;width:100%}table.adm colgroup,table.adm tr:first-child{display:none}table.adm td.n{text-align:left}}
+
+.part{background:linear-gradient(90deg,var(--navy) 0%,var(--navy-2) 100%);border-left:6px solid var(--teal)}
+.doc-head .inst{display:flex;gap:12px;align-items:center}
+.doc-head .inst img{width:72px;height:72px;border-radius:12px;flex:none}
+.doc-head .title .t1{background:linear-gradient(90deg,var(--navy) 0%,var(--navy-2) 45%,var(--teal) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.doc-head{border-bottom:0;position:relative;padding-bottom:14px}
+.doc-head::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--ca1) 0 20%,var(--ca2) 20% 40%,var(--ca3) 40% 60%,var(--ca4) 60% 80%,var(--ca5) 80% 100%)}
+.pk[data-o=ca][data-k=CA1]{--c:var(--ca1)}.pk[data-o=ca][data-k=CA2]{--c:var(--ca2)}.pk[data-o=ca][data-k=CA3]{--c:var(--ca3)}.pk[data-o=ca][data-k=CA4]{--c:var(--ca4)}.pk[data-o=ca][data-k=CA5]{--c:var(--ca5)}
+.pk[data-o=ca]{border-color:var(--c);border-width:2px;color:var(--ink);min-width:58px}
+.pk[data-o=ca].on{background:var(--c);border-color:var(--c);color:#fff}
+.sheet[data-ca]{border-top:4px solid var(--c,var(--navy))}
+.sheet[data-ca=CA1]{--c:var(--ca1)}.sheet[data-ca=CA2]{--c:var(--ca2)}.sheet[data-ca=CA3]{--c:var(--ca3)}.sheet[data-ca=CA4]{--c:var(--ca4)}.sheet[data-ca=CA5]{--c:var(--ca5)}
+table.check tr.sub.spe td{border-left:5px solid var(--c,var(--navy))}
+.btn.pri{background:linear-gradient(90deg,var(--navy),var(--navy-2))}
+.pk.on:not([data-o=ca]){background:var(--navy)}
+table.form th{background:var(--navy-soft);color:var(--navy)}
+.verdict{border-radius:6px}
+footer img{width:22px;height:22px;vertical-align:middle;border-radius:5px;margin-right:6px}
+@media (max-width:600px){.doc-head .inst img{width:52px;height:52px}header.top .logo{width:34px;height:34px}}
+.inv{display:inline-block;margin-left:6px;padding:1px 6px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--vsc);border:1px solid var(--vsc);background:var(--vsc-soft);vertical-align:middle}
+
+/* ===== Format paysage compact ===== */
+body{font-size:12.5px;line-height:1.3}
+header.top{padding:4px 12px;gap:10px}
+header.top .logo{width:30px;height:30px;border-radius:6px}
+header.top h1{font-size:.95rem;letter-spacing:.03em}
+header.top nav{align-items:center;gap:2px}
+header.top nav a{padding:4px 8px;font-size:.74rem}
+.hbtn{margin-left:8px;border:1px solid #fff;background:transparent;color:#fff;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;padding:5px 10px;cursor:pointer}
+.hbtn:hover{background:#fff;color:var(--navy)}
+main{max-width:none;padding:10px 10px 4px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;background:#fff;border:1px solid var(--line);border-top:3px solid var(--c,var(--navy));padding:5px 10px;margin-bottom:8px}
+.bar[data-ca=CA1]{--c:var(--ca1)}.bar[data-ca=CA2]{--c:var(--ca2)}.bar[data-ca=CA3]{--c:var(--ca3)}.bar[data-ca=CA4]{--c:var(--ca4)}.bar[data-ca=CA5]{--c:var(--ca5)}
+.bl-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--navy)}
+.bar .pks{gap:4px}
+.pk{padding:3px 10px;min-height:26px;font-size:.78rem}
+.pk[data-o=ca]{min-width:44px}
+.ca-lib{font-size:.75rem;color:var(--muted);flex:1;min-width:160px}
+.intit{background:#fff;border:1px solid var(--line);border-left:5px solid var(--c,var(--navy));padding:6px 10px;margin-bottom:8px}
+.intit[data-ca=CA1]{--c:var(--ca1)}.intit[data-ca=CA2]{--c:var(--ca2)}.intit[data-ca=CA3]{--c:var(--ca3)}.intit[data-ca=CA4]{--c:var(--ca4)}.intit[data-ca=CA5]{--c:var(--ca5)}
+.intit-h{font-weight:700;font-size:.74rem;text-transform:uppercase;letter-spacing:.04em;color:var(--navy);margin-bottom:4px}
+.intit table{border-collapse:collapse;width:100%}
+.intit th{width:70px;text-align:left;vertical-align:top;padding:2px 8px 2px 0;font-size:.75rem;color:var(--navy);white-space:nowrap}
+.intit td{padding:2px 0;font-size:.8rem;border-bottom:1px dotted var(--line-soft)}
+.cols{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) 300px;gap:8px;align-items:start}
+.cols .col{background:#fff;border:1px solid var(--line);padding:0}
+@media (max-width:1100px){.cols{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.cols .side{grid-column:1/-1}}
+@media (max-width:720px){.cols{grid-template-columns:1fr}}
+.part{margin:0;padding:4px 8px;font-size:.72rem;border-left-width:4px}
+.rule{padding:3px 8px;font-size:.72rem}
+table.check th{padding:3px;font-size:.62rem}
+table.check td{padding:3px 6px}
+table.check td.n{font-size:.7rem}
+table.check col.c-n{width:34px}
+table.check col.c-yn{width:92px}
+table.check tr.sub td{font-size:.66rem;padding:3px 6px}
+table.check td.crit .lib{font-size:.8rem}
+table.check td.crit .obs{font-size:.74rem;margin-top:2px}
+.ynw button{width:40px;padding:3px 0;font-size:.7rem}
+.side{position:sticky;top:46px}
+.verdict{margin:6px;padding:8px;font-size:1rem}
+table.recap td{padding:3px 6px;font-size:.74rem}
+.boxed{padding:6px}
+#avis{min-height:200px;font-size:.78rem}
+.btn{padding:5px 10px;font-size:.72rem}
+.btn.sm{padding:3px 8px;font-size:.68rem}
+.alert{padding:4px 8px;font-size:.74rem;margin:6px}
+.empty{padding:16px;margin-top:0;background:#fff}
+footer{padding:6px;font-size:.65rem}
+.sheet{padding:12px 14px;margin-bottom:10px}
+
+/* ===== Boutons arrondis et colorés ===== */
+.btn,.pk,.hbtn,.chip-btn,.pick button,.ynw button{transition:background .15s,color .15s,border-color .15s,box-shadow .15s,transform .05s}
+.btn{border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--navy);box-shadow:0 1px 2px rgba(11,37,89,.08)}
+.btn:hover{background:var(--navy-soft);border-color:var(--navy-2)}
+.btn:active,.pk:active,.ynw button:active{filter:brightness(.93)}
+.btn.pri{background:linear-gradient(135deg,var(--navy-2),var(--teal));border:0;color:#fff}
+.btn.pri:hover{filter:brightness(1.08)}
+.btn.danger{color:var(--nv);border-color:#f3b8b2;background:#fff}
+.btn.danger:hover{background:var(--nv-soft)}
+.btn:disabled{box-shadow:none}
+.hbtn{border-radius:999px;border:0;background:linear-gradient(135deg,var(--ca3),var(--ca2));color:#fff;padding:6px 14px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.hbtn:hover{filter:brightness(1.1);background:linear-gradient(135deg,var(--ca3),var(--ca2));color:#fff}
+header.top nav a{border-radius:999px;border-bottom:0}
+header.top nav a.on{background:rgba(255,255,255,.16)}
+.pk{border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--navy)}
+.pk:hover{border-color:var(--navy-2);background:var(--navy-soft)}
+.pk.on:not([data-o=ca]){background:linear-gradient(135deg,var(--navy),var(--navy-2));border-color:transparent;color:#fff;box-shadow:0 2px 5px rgba(11,37,89,.3)}
+.pk[data-o=ca]{border-color:var(--c);color:var(--c);background:#fff}
+.pk[data-o=ca]:hover{background:color-mix(in srgb,var(--c) 12%,#fff)}
+.pk[data-o=ca].on{background:var(--c);color:#fff;box-shadow:0 2px 6px color-mix(in srgb,var(--c) 45%,transparent)}
+.pick button{border-radius:999px;border:1.5px solid var(--line);color:var(--navy)}
+.pick button.on{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;border-color:transparent}
+.ynw{border:0;gap:4px;display:inline-flex}
+.ynw button,.ynw button+button{border:1.5px solid;border-radius:999px;background:#fff;width:44px;font-weight:800}
+.ynw button.y{border-color:#9fd8bb;color:var(--v)}
+.ynw button.y:hover{background:var(--v-soft)}
+.ynw button.y.on{background:var(--v);border-color:var(--v);color:#fff;box-shadow:0 2px 5px rgba(6,118,71,.35)}
+.ynw button.nn.bl{border-color:#f0b3ad;color:var(--nv)}
+.ynw button.nn.bl:hover{background:var(--nv-soft)}
+.ynw button.nn.bl.on{background:var(--nv);border-color:var(--nv);color:#fff;box-shadow:0 2px 5px rgba(180,35,24,.35)}
+.ynw button.nn.nb{border-color:#f3cc98;color:var(--vsc)}
+.ynw button.nn.nb:hover{background:var(--vsc-soft)}
+.ynw button.nn.nb.on{background:var(--vsc);border-color:var(--vsc);color:#fff;box-shadow:0 2px 5px rgba(181,71,8,.35)}
+.chip-btn{margin-top:4px;border:1.5px solid var(--teal);color:#037c7e;background:#e6f8f8;border-radius:999px;padding:2px 10px;font-size:.68rem;font-weight:700;cursor:pointer;letter-spacing:.02em}
+.chip-btn:hover{background:var(--teal);color:#fff}
+.chip-btn::before{content:"▸ ";}
+.chip-btn[aria-expanded=true]::before{content:"▾ ";}
+.intit{margin:6px 0 2px;border-radius:8px}
+.intit-src{font-size:.66rem;color:var(--muted);margin-top:4px;font-style:italic}
+.verdict{border-radius:10px}
+.cols .col,.side .sheet,.bar{border-radius:10px;overflow:hidden}
+.bar{overflow:visible}
+textarea{border-radius:8px}
+#avis{border-radius:8px}
+table.check col.c-yn{width:112px}
+.intit table th,.intit table td{border:0;background:none;text-transform:none;letter-spacing:0;padding:3px 8px 3px 0;vertical-align:top;text-align:left}
+.intit table th{color:var(--navy);font-size:.72rem;font-weight:700;width:auto;white-space:nowrap}
+.intit table td{font-size:.8rem;border-bottom:1px dotted var(--line-soft)}
+.intit table tr:last-child td{border-bottom:0}
+.part{border-radius:0}
+
+/* ===== Colonne unique, bandeau de choix ===== */
+.bar{gap:8px 14px;padding:8px 12px;align-items:stretch}
+.choice{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--navy-soft);border:1px solid #d5deef;border-radius:10px;padding:6px 10px}
+.choice .bl-lbl{font-size:.74rem;white-space:nowrap}
+.choice:nth-child(2){flex:1}
+.one{display:flex;flex-direction:column;gap:10px}
+.one .col{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.one[data-ca=CA1]{--c:var(--ca1)}.one[data-ca=CA2]{--c:var(--ca2)}.one[data-ca=CA3]{--c:var(--ca3)}.one[data-ca=CA4]{--c:var(--ca4)}.one[data-ca=CA5]{--c:var(--ca5)}
+table.check col.c-n{width:44px}
+.pending{background:#fff;border:1px dashed var(--line);border-radius:10px;padding:10px 14px;color:var(--muted);font-size:.8rem;text-align:center}
+.decision{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.dgrid{display:grid;grid-template-columns:320px 1fr;gap:12px;padding:10px}
+.dgrid.solo{grid-template-columns:320px}
+@media (max-width:760px){.dgrid{grid-template-columns:1fr}}
+.dgrid .verdict{margin:0 0 8px}
+.sublbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--navy);margin-bottom:4px}
+.decision .boxed{border:0;padding:0}
+#avis{min-height:150px}
+.sel{border:1.5px solid var(--line);border-radius:999px;padding:4px 30px 4px 12px;font-size:.8rem;font-weight:600;color:var(--navy);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%230b2559'/%3E%3C/svg%3E") no-repeat right 12px center;appearance:none;-webkit-appearance:none;min-width:220px;cursor:pointer}
+.sel:focus{outline:none;border-color:var(--navy-2);box-shadow:0 0 0 3px var(--navy-soft)}
+.sel:disabled{opacity:.55;cursor:default}
+.choice:nth-child(2){flex:0 1 auto}
+.ca-lib{max-width:250px;flex:0 1 250px;font-size:.72rem;line-height:1.25}
+.choice:nth-child(3){flex:1 1 280px}
+.choice:nth-child(3) .sel{flex:1}
+.ynw button{min-height:26px;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.pk,.btn,.hbtn,.chip-btn{user-select:none;-webkit-user-select:none;touch-action:manipulation}
+table.check td.yn{padding-top:2px;padding-bottom:2px}
+tr.bl .inv{color:var(--nv);border-color:var(--nv);background:var(--nv-soft)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><img class="logo" src="data:image/jpeg;base64,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" alt="CAHP Nantes"><h1>Grille d’analyse de référentiel - CCF</h1></div>
+  <nav id="nav">
+    <a href="#/" data-v="analyse">Analyse</a>
+    <a href="#/admin" data-v="admin">Administration</a>
+    <button type="button" class="hbtn" id="reset">Nouvelle analyse</button>
+  </nav>
+</header>
+<main id="app"></main>
+<footer>CAHP Nantes · N’EPS — by Quentin Delisle · Commission académique EPS — Académie de Nantes</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   CRITÈRES PAR DÉFAUT
+   Sources : document « L’analyse des référentiels d’évaluation… session 2027 »
+   (commission), référentiels nationaux BAC GT (BO n°36 du 3-10-2019,
+   modifié BO n°17 du 28-4-2022, NDS BO n°9 du 26-2-2026), BAC Pro
+   (circulaire du 20-9-2024, BO n°39), CAP (circulaire BO n°31 du 30-7-2020).
+   Format d’un critère : [critère vérifié, demande rédigée pour l’avis]
+   ===================================================================== */
+const EXAMENS = {GT:"BAC GT / AEFE", BCP:"BAC Pro", CAP:"CAP"};
+const CAS = {
+  CA1:"Réaliser une performance motrice maximale mesurable à une échéance donnée",
+  CA2:"Adapter son déplacement à des environnements variés et/ou incertains",
+  CA3:"Réaliser une prestation corporelle destinée à être vue et appréciée",
+  CA4:"Conduire un affrontement individuel ou collectif pour gagner",
+  CA5:"Réaliser et orienter son activité physique pour développer ses ressources et s’entretenir"
+};
+
+/* Chaque critère = [question fermée (OUI = conforme), demande formulée dans l’avis si NON]
+   Liste validée par la commission (revue du 14/10/2026). */
+const AFL1_4PTS = ["Chaque élément de l’AFL 1 est-il noté sur au moins 4 points ?","Noter chacun des éléments de l’AFL 1 sur au moins 4 points."];
+const ROLE_AU_MOINS_UN = ["L’élève est-il évalué dans au moins un rôle qu’il a choisi ?","Évaluer l’élève dans au moins un rôle qu’il a choisi."];
+const COEF4 = ["Un coefficient de difficulté sur 4 niveaux est-il appliqué ?","Appliquer un coefficient de difficulté sur 4 niveaux."];
+const INCERT = ["L’épreuve comporte-t-elle des éléments d’incertitude liés au milieu ?","Intégrer des éléments d’incertitude liés au milieu."];
+const INDIV = ["La notation est-elle individuelle, y compris lorsque l’épreuve se fait à plusieurs ?","Préciser que la notation reste individuelle lorsque l’épreuve se fait à plusieurs."];
+const FG = ["Une différence filles / garçons est-elle prévue ?","Prévoir la prise en compte de la différence filles / garçons."];
+const OPP = ["L’épreuve comporte-t-elle plusieurs oppositions ?","Prévoir plusieurs oppositions."];
+const EQUIL = ["Les modalités garantissant des rapports de force équilibrés (équipes, poules…) sont-elles précisées ?","Préciser les modalités garantissant des rapports de force équilibrés."];
+const STRAT = ["L’élève peut-il adapter sa stratégie entre les oppositions ?","Permettre à l’élève d’adapter sa stratégie entre les oppositions."];
+const CARNET = ["Un carnet d’entraînement est-il prévu ?","Prévoir un carnet d’entraînement."];
+const PUBLIC_PRO = ["La prestation est-elle présentée devant un public identifié (EPLE, classe, autre) ?","Préciser le public devant lequel la prestation est présentée."];
+const DEUX_PASSAGES = ["Deux passages sont-ils prévus ?","Prévoir deux passages."];
+const REGUL_PASSAGES = ["Un temps de régulation est-il prévu entre les deux passages ?","Prévoir un temps de régulation entre les deux passages."];
+
+const PRO_COMMUNS = [
+  ["L’AFLP 1 est-il noté sur 7 points ?","Noter l’AFLP 1 sur 7 points."],
+  ["L’AFLP 2 est-il noté sur 5 points ?","Noter l’AFLP 2 sur 5 points."],
+  ["Exactement 2 AFLP sont-ils retenus parmi les AFLP 3 à 6 ?","Retenir 2 AFLP parmi les AFLP 3 à 6."],
+];
+const DEGRE_MOITIE = ["Le degré 3 commence-t-il à la moitié des points de chaque AFLP (ex. : 3,5 pts sur 7 ; 2,5 pts sur 5) ?","Ajuster les bornes des degrés : le passage du degré 2 au degré 3 doit permettre l’attribution de la moitié des points dévolus à l’AFLP."];
+const PRO_CA2 = [
+  ["L’élève choisit-il et planifie-t-il son itinéraire ?","Permettre à l’élève de choisir et de planifier son itinéraire."],
+  INDIV, FG
+];
+const PRO_CA2_COEF = ["La note de l’AFLP 1 est-elle ajustée selon la difficulté de l’itinéraire (coefficient) ?","Ajuster la note de l’AFLP 1 selon la difficulté de l’itinéraire (coefficient de difficulté)."];
+const PRO_CA3 = [PUBLIC_PRO];
+const PRO_CA3_NB = [DEUX_PASSAGES, REGUL_PASSAGES, ["Le niveau de difficulté de la prestation permet-il d’ajuster la note de l’AFLP 1 ?","Ajuster la note de l’AFLP 1 selon le niveau de difficulté de la prestation."]];
+const PRO_CA4 = [OPP, EQUIL, STRAT];
+const PRO_CA4_NB = [["Le nombre de matchs gagnés permet-il d’ajuster la note de l’AFLP 1 ?","Ajuster la note de l’AFLP 1 selon le nombre de matchs gagnés."]];
+const PRO_CA5 = [
+  ["Le projet d’entraînement est-il relié à un mobile personnel de l’élève ?","Relier le projet d’entraînement à un mobile personnel de l’élève."],
+  CARNET,
+  ["L’élève peut-il réguler sa charge en fonction de ses ressentis ?","Permettre à l’élève de réguler sa charge en fonction de ses ressentis."]
+];
+const ROLES_GT = ["Le référentiel précise-t-il qu’au moins 1 rôle est évalué parmi au moins deux rôles proposés par l’équipe ?","Préciser que l’élève est évalué dans au moins un rôle, choisi parmi au moins deux rôles proposés par l’équipe."];
+
+const DEFAULT_DATA = {
+  version: 16,
+  tousExamens: [
+    ["Le référentiel est-il adapté à l’APSA et à l’établissement (pas de copier-coller du référentiel national ou d’un ancien référentiel) ?","Adapter le référentiel à l’APSA et à l’établissement : il ne doit pas être un copier-coller du référentiel national ou d’un ancien référentiel."],
+    ["Les {AFL} reportés dans le référentiel correspondent-ils à ceux définis dans le cadre national pour ce CA ?","Reporter dans le référentiel les {AFL} définis dans le cadre national pour ce champ d’apprentissage."],
+    ["Le total des points du référentiel est-il égal à 20 ?","Vérifier que le total des points du référentiel est égal à 20."],
+    ["La note se décompose-t-elle en 12 points évalués {MOMENT} et 8 points évalués au fil de la séquence ?","Organiser la notation en 12 points évalués {MOMENT} et 8 points évalués au fil de la séquence."],
+    ["Chaque {AFL} évalué dispose-t-il d’une grille en 4 degrés ?","Construire une grille en 4 degrés pour chaque {AFL} évalué."],
+    ["La ventilation des points est-elle indiquée dans chaque degré ?","Indiquer la ventilation des points dans chaque degré."],
+    ["Les fourchettes de points se suivent-elles sans chevauchement ni trou ?","Corriger les fourchettes de points pour qu’elles se suivent sans chevauchement ni trou."],
+    ["La répartition des 8 points possible entre les deux {AFL} évalués au fil de la séquence est-elle : 2-6 / 4-4 / 6-2 ?","Proposer aux élèves les trois seules répartitions possibles des 8 points : 2-6, 4-4 ou 6-2."]
+  ],
+  communs: {GT: [], BCP: PRO_COMMUNS.concat([DEGRE_MOITIE]), CAP: PRO_COMMUNS.concat([DEGRE_MOITIE])},
+  specifiques: {
+    "GT-CA1": [
+      ["L’épreuve comporte-t-elle au moins deux performances maximales mesurées et/ou chronométrées ?","Prévoir au moins deux performances maximales mesurées et/ou chronométrées."],
+      ["Le barème de performance distingue-t-il filles et garçons ?","Établir un barème de performance distinct filles / garçons."],
+      ["Le barème de performance intègre-t-il le seuil médian national (10/20) ?","Caler le barème de performance sur le seuil médian national (10/20)."],
+      ["Chaque élément de l’AFL 1 (performance, efficacité technique) est-il noté sur 6 points ?","Noter chacun des éléments de l’AFL 1 (performance, efficacité technique) sur 6 points, conformément au cadre national modifié (BO n°17 du 28 avril 2022)."],
+      ["Le référentiel contient-il un nomogramme ?","Supprimer le nomogramme, qui ne figure plus dans le cadre national modifié (BO n°17 du 28 avril 2022).","inv"],
+      ["L’efficacité technique est-elle évaluée sur 4 degrés à partir d’indicateurs décrits ?","Évaluer l’efficacité technique sur 4 degrés à partir d’indicateurs décrits."]
+    ],
+    "GT-CA2": [
+      ["L’élève choisit-il son itinéraire ?","Permettre à l’élève de choisir son itinéraire."],
+      INDIV, FG,
+      ["Une régulation de l’itinéraire est-elle possible ?","Prévoir la possibilité de réguler l’itinéraire."],
+      AFL1_4PTS
+    ],
+    "GT-CA3": [
+      ["La composition est-elle présentée devant un public ?","Prévoir une présentation devant un public."],
+      AFL1_4PTS
+    ],
+    "GT-CA4": [OPP, EQUIL,
+      ["Un temps d’analyse est-il prévu entre deux matchs ou séquences de jeu ?","Prévoir un temps d’analyse entre deux matchs ou séquences de jeu."],
+      STRAT,
+      AFL1_4PTS
+    ],
+    "GT-CA5": [
+      ["L’élève choisit-il un mobile ou un projet personnel ?","Permettre à l’élève de choisir un mobile ou un projet personnel."],
+      CARNET,
+      ["Les paramètres de charge (volume, durée, intensité, récupération) sont-ils explicités ?","Expliciter les paramètres de charge (volume, durée, intensité, récupération)."],
+      ["L’épreuve alterne-t-elle temps de travail, de récupération et d’analyse ?","Organiser l’alternance de temps de travail, de récupération et d’analyse."],
+      AFL1_4PTS
+    ],
+    "BCP-CA1": [
+      ["L’AFLP 1 attribue-t-il 3 points au maximum à la performance ?","Attribuer 3 points au maximum à la performance dans l’AFLP 1."],
+      ["L’AFLP 1 attribue-t-il 4 points à la manière de produire et répartir son effort ?","Attribuer 4 points à la manière de produire et répartir son effort."]
+    ],
+    "BCP-CA2": PRO_CA2, "BCP-CA3": PRO_CA3, "BCP-CA4": PRO_CA4, "BCP-CA5": PRO_CA5,
+    "CAP-CA1": [
+      ["Un barème de performance est-il fourni ?","Établir un barème de performance."],
+      ["La note de l’AFLP 1 est-elle liée au degré atteint et à la performance ?","Lier la note de l’AFLP 1 au degré atteint et à la performance."]
+    ],
+    "CAP-CA2": PRO_CA2, "CAP-CA3": PRO_CA3, "CAP-CA4": PRO_CA4, "CAP-CA5": PRO_CA5
+  },
+  nonBloquants: [
+    {titre:"Description de l’épreuve", items:[
+      ["Le descriptif de l’épreuve est-il suffisamment détaillé pour comprendre l’épreuve dans son ensemble ?","Détailler le descriptif de l’épreuve pour permettre de la comprendre dans son ensemble."]]},
+    {titre:"Critères d’évaluation", items:[
+      ["Chaque degré est-il décrit par des indicateurs observables (actions ou résultats mesurables) ?","Décrire chaque degré par des indicateurs observables (actions ou résultats mesurables)."],
+      ["Chaque élément évalué est-il renseigné dans les 4 degrés (aucune case vide) ?","Renseigner chaque élément évalué dans les 4 degrés."]]}
+  ],
+  intitules: {"CAP-CA1": [["AFLP 1", "Produire et répartir intentionnellement ses efforts en mobilisant ses ressources pour gagner ou pour battre un record."], ["AFLP 2", "Connaître et utiliser des techniques efficaces pour produire la meilleure performance possible."], ["AFLP 3", "S’engager et persévérer, seul ou à plusieurs, dans des efforts répétés pour progresser dans une activité de performance."], ["AFLP 4", "S’impliquer dans des rôles sociaux pour assurer le bon déroulement d’une épreuve de production de performance."], ["AFLP 5", "Se préparer à un effort long ou intense pour être efficace dans la production d’une performance à une échéance donnée."], ["AFLP 6", "Identifier ses progrès et connaître sa meilleure performance réalisée pour la situer culturellement."]], "BCP-CA1": [["AFLP 1", "Produire et répartir lucidement ses efforts en mobilisant de façon optimale ses ressources pour gagner ou pour battre un record."], ["AFLP 2", "Connaître et mobiliser les techniques efficaces pour produire la meilleure performance possible."], ["AFLP 3", "Analyser sa performance pour adapter son projet et progresser."], ["AFLP 4", "Assumer des rôles sociaux pour organiser une épreuve de production de performance, un concours."], ["AFLP 5", "Assurer la prise en charge de sa préparation et de celle d’un groupe, de façon autonome pour produire la meilleure performance possible."], ["AFLP 6", "Connaître son niveau pour établir un projet de performance située culturellement."]], "CAP-CA2": [["AFLP 1", "Planifier et conduire un déplacement adapté à ses ressources pour effectuer le trajet prévu dans sa totalité ; le cas échéant, savoir renoncer."], ["AFLP 2", "Utiliser des techniques efficaces pour adapter son déplacement aux caractéristiques du milieu."], ["AFLP 3", "Sélectionner des informations utiles pour planifier son itinéraire et l’adapter éventuellement en cours de déplacement."], ["AFLP 4", "S’impliquer dans des rôles sociaux pour assurer le bon fonctionnement d’une activité de pleine nature."], ["AFLP 5", "Contrôler ses émotions pour accepter de s’engager dans un environnement partiellement connu."], ["AFLP 6", "Se préparer, connaître les risques, respecter la réglementation et appliquer les procédures d’urgence à mettre en œuvre dans les différents environnements de pratique pour s’y engager en sécurité."]], "BCP-CA2": [["AFLP 1", "Anticiper et planifier son itinéraire pour concevoir et conduire dans sa totalité un projet de déplacement."], ["AFLP 2", "Mobiliser des techniques efficaces pour adapter et optimiser son déplacement aux caractéristiques du milieu."], ["AFLP 3", "Analyser sa prestation pour comprendre les alternatives possibles et ajuster son projet en fonction de ses ressources et de celles du milieu."], ["AFLP 4", "Assumer les rôles sociaux pour organiser la pratique des activités de pleine nature."], ["AFLP 5", "Se préparer et maintenir un engagement optimal permettant de garder sa lucidité tout au long de son parcours pour pouvoir réévaluer son itinéraire ou renoncer le cas échéant."], ["AFLP 6", "Respecter et faire respecter la réglementation et les procédures d’urgence pour les mettre en œuvre dans les différents environnements de pratique."]], "CAP-CA3": [["AFLP 1", "S’engager devant des spectateurs ou des juges pour produire ou reproduire des formes corporelles maîtrisées au service d’une intention."], ["AFLP 2", "Utiliser des techniques efficaces pour enrichir sa motricité, la rendre plus originale, plus efficace au service de la prestation prévue."], ["AFLP 3", "Prévoir et mémoriser le déroulement des temps forts et des temps faibles de sa prestation pour la réaliser dans son intégralité en restant concentré."], ["AFLP 4", "Utiliser des critères explicites pour apprécier et/ou évaluer la prestation indépendamment de la personne."], ["AFLP 5", "Se préparer pour présenter une prestation complète, maîtrisée et sécurisée à une échéance donnée."], ["AFLP 6", "S’enrichir d’éléments de culture liés à la pratique abordée pour éveiller une curiosité culturelle."]], "BCP-CA3": [["AFLP 1", "Accomplir une prestation animée d’une intention dans la perspective d’être jugé et/ou apprécié."], ["AFLP 2", "Mobiliser des techniques de plus en plus complexes pour rendre plus fluide la prestation et pour l’enrichir de formes corporelles variées et maîtrisées."], ["AFLP 3", "Composer et organiser dans le temps et l’espace le déroulement des moments forts et faibles de sa prestation pour se produire devant des spectateurs/juges."], ["AFLP 4", "Assumer les rôles inhérents à la pratique artistique et acrobatique notamment en exprimant et en écoutant des arguments sur la base de critères partagés, pour situer une prestation."], ["AFLP 5", "Se préparer et s’engager pour présenter une prestation optimale et sécurisée à une échéance donnée."], ["AFLP 6", "S’enrichir de la connaissance de productions de qualité issues du patrimoine culturel artistique et gymnique pour progresser dans sa propre pratique et aiguiser son regard de spectateur."]], "CAP-CA4": [["AFLP 1", "Identifier le déséquilibre adverse et en profiter pour produire rapidement l’action décisive choisie et marquer le point."], ["AFLP 2", "Utiliser des techniques et des tactiques d’attaque adaptées pour favoriser des occasions de marquer et mobiliser des moyens de défense pour s’opposer."], ["AFLP 3", "Persévérer face à la difficulté et accepter la répétition pour améliorer son efficacité motrice."], ["AFLP 4", "Terminer la rencontre et accepter la défaite ou la victoire dans le respect de l’adversaire ; intégrer les règles et s’impliquer dans les rôles sociaux pour permettre le bon déroulement du jeu."], ["AFLP 5", "Se préparer et systématiser sa préparation générale et spécifique pour être en pleine possession de ses moyens lors de la confrontation."], ["AFLP 6", "Connaître les pratiques sportives dans la société contemporaine pour situer et comprendre le sens des pratiques scolaires."]], "BCP-CA4": [["AFLP 1", "Réaliser des choix tactiques et stratégiques pour faire basculer le rapport de force en sa faveur et marquer le point."], ["AFLP 2", "Mobiliser des techniques d’attaque efficaces pour se créer et exploiter des occasions de marquer ; résister et neutraliser individuellement ou collectivement l’attaque adverse pour rééquilibrer le rapport de force."], ["AFLP 3", "Analyser les forces et les faiblesses en présence par l’exploitation de données objectives pour faire des choix tactiques et stratégiques adaptés à une prochaine confrontation."], ["AFLP 4", "Respecter et faire respecter les règles partagées pour que le jeu puisse se dérouler sereinement ; assumer plusieurs rôles sociaux pour permettre le bon déroulement du jeu."], ["AFLP 5", "Savoir se préparer, s’entraîner et récupérer pour faire preuve d’autonomie."], ["AFLP 6", "Porter un regard critique sur les pratiques sportives pour comprendre le sens des pratiques scolaires."]], "CAP-CA5": [["AFLP 1", "Construire et stabiliser une motricité spécifique pour être efficace dans le suivi d’un thème d’entraînement en cohérence avec un mobile personnel de développement."], ["AFLP 2", "Mettre en lien des ressentis avec une charge de travail pour réguler cette charge de manière autonome."], ["AFLP 3", "Mobiliser différentes méthodes d’entraînement, analyser ses ressentis pour fonder ses choix."], ["AFLP 4", "Coopérer et assurer les rôles sociaux pour aider au progrès individuel dans des conditions de sécurité."], ["AFLP 5", "S’engager avec une intensité ciblée et persévérer dans l’effort pour envisager des progrès."], ["AFLP 6", "Intégrer des conseils d’entraînement, de diététique, d’hygiène de vie pour se construire un mode de vie sain et une pratique raisonnée."]], "BCP-CA5": [["AFLP 1", "Concevoir et mettre en œuvre un projet d’entraînement pour répondre à un mobile personnel de développement."], ["AFLP 2", "Éprouver différentes méthodes d’entraînement et en identifier les principes pour les réutiliser dans sa séance."], ["AFLP 3", "Systématiser un retour réflexif sur sa pratique pour réguler sa charge de travail en fonction d’indicateurs de l’effort (fréquence cardiaque, ressenti musculaire et respiratoire, fatigue générale)."], ["AFLP 4", "Agir avec et pour les autres en vue de la réalisation du projet d’entraînement en assurant spontanément les rôles sociaux."], ["AFLP 5", "Construire une motricité contrôlée pour évoluer dans des conditions de sécurité."], ["AFLP 6", "Intégrer des conseils d’entraînement, de diététique, d’hygiène de vie pour se construire un mode de vie sain et une pratique raisonnée."]], "GT-CA1": [["AFL 1", "S’engager pour produire une performance maximale à l’aide de techniques efficaces, en gérant les efforts musculaires et respiratoires nécessaires et en faisant le meilleur compromis entre l’accroissement de vitesse d’exécution et de précision."], ["AFL 2", "S’entraîner, individuellement et collectivement, pour réaliser une performance."], ["AFL 3", "Choisir et assumer les rôles qui permettent un fonctionnement collectif solidaire."]], "GT-CA2": [["AFL 1", "S’engager à l’aide d’une motricité spécifique pour réaliser en sécurité et à son meilleur niveau, un itinéraire dans un contexte incertain."], ["AFL 2", "S’entraîner individuellement et collectivement, pour se déplacer de manière efficiente et en toute sécurité."], ["AFL 3", "Coopérer pour réaliser un projet de déplacement, en toute sécurité."]], "GT-CA3": [["AFL 1 (APSA à visée esthétique ou acrobatique)", "S’engager pour composer et réaliser un enchaînement à visée esthétique ou acrobatique destiné à être jugé, en combinant des formes corporelles codifiées."], ["AFL 1 (APSA à visée artistique)", "S’engager pour composer et interpréter une chorégraphie collective selon un projet artistique en mobilisant une motricité expressive et des procédés de composition."], ["AFL 2", "Se préparer et s’engager, individuellement et collectivement, pour s’exprimer devant un public et susciter des émotions."], ["AFL 3", "Choisir et assumer des rôles au service de la prestation collective."]], "GT-CA4": [["AFL 1", "S’engager pour gagner une rencontre en faisant des choix techniques et tactiques pertinents au regard de l’analyse du rapport de force."], ["AFL 2", "Se préparer et s’entraîner, individuellement ou collectivement, pour conduire et maîtriser un affrontement collectif ou interindividuel."], ["AFL 3", "Choisir et assumer les rôles qui permettent un fonctionnement collectif solidaire."]], "GT-CA5": [["AFL 1", "S’engager pour obtenir les effets recherchés selon son projet personnel, en faisant des choix de paramètres d’entraînement cohérents avec le thème retenu."], ["AFL 2", "S’entraîner, individuellement ou collectivement, pour développer ses ressources et s’entretenir en fonction des effets recherchés."], ["AFL 3", "Coopérer pour faire progresser."]]},
+  apsaCodifiees: ["Acrosport","Acrosport (Adapté)","Gymnastique","Gymnastique (Adapté)","Double Dutch","Double Dutch (Adapté)","Patinage","Patinage (Adapté)"],
+  nbCommuns: {GT: [], BCP: [], CAP: []},
+  nbSpecifiques: {
+    "GT-CA1": [
+      ROLES_GT],
+    "GT-CA2": [["Plusieurs niveaux de difficulté d’itinéraire sont-ils proposés ?","Proposer plusieurs niveaux de difficulté d’itinéraire."], INCERT, COEF4],
+    "GT-CA3": [DEUX_PASSAGES, REGUL_PASSAGES, ["L’espace, la durée mini / maxi, le support sonore et la tenue sont-ils tous définis ?","Définir l’espace, la durée mini / maxi, le support sonore et la tenue."], COEF4, ROLES_GT, ["La difficulté est-elle graduée sur au moins 3 niveaux à partir d’un code de référence ?","S’appuyer sur un code de référence et graduer la difficulté sur au moins 3 niveaux.","codif"]],
+    "GT-CA4": [
+      ["Le gain des matchs est-il traduit sur 4 niveaux pour ajuster la note de l’AFL 1 ?","Traduire le gain des matchs sur 4 niveaux pour ajuster la note de l’AFL 1."],
+      ROLES_GT],
+    "BCP-CA2": [INCERT, PRO_CA2_COEF], "CAP-CA2": [INCERT, PRO_CA2_COEF],
+    "BCP-CA3": PRO_CA3_NB, "CAP-CA3": PRO_CA3_NB,
+    "BCP-CA4": PRO_CA4_NB, "CAP-CA4": PRO_CA4_NB
+  },
+  textes: {
+    nv: "La commission émet un avis défavorable : le référentiel n’est pas validé en l’état. Les éléments suivants ne sont pas conformes au référentiel national et doivent être modifiés :",
+    nvPlus: "La commission vous invite également à reprendre les points suivants :",
+    vsc: "La commission émet un avis favorable sous conditions : le référentiel est validé si les points suivants sont repris :",
+    v: "La commission émet un avis favorable : le référentiel est validé.",
+    suivi: "Les modifications demandées lors de la précédente session n’ont pas été intégrées :",
+    suiviPartiel: "Les modifications demandées lors de la précédente session n’ont été que partiellement intégrées :"
+  }
+};
+
+/* ================== STOCKAGE ================== */
+const K_DATA="vref3.data";
+try{ ["vref2.cur","vref2.data","vref.records","vref.data","vref.membre"].forEach(k=>localStorage.removeItem(k)); }catch(e){}
+function load(k, def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch(e){ return def; } }
+function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+let DATA = load(K_DATA, null) || structuredClone(DEFAULT_DATA);
+const blank = () => ({examen:"", ca:"", prev:{statut:"aucun", modifie:"", demandes:""}, flags:{}, comments:{}, avisEdite:null});
+let cur = blank(); // aucune trace : l’analyse n’est jamais enregistrée
+const saveData = () => save(K_DATA, DATA);
+/* Migration : la liste des critères a été entièrement revue (v6) : les anciens paramètres sont remplacés */
+if ((DATA.version||0) < 16){ DATA = structuredClone(DEFAULT_DATA); saveData(); }
+if (!DATA.tousExamens) DATA.tousExamens = [];
+if (!DATA.nbSpecifiques) DATA.nbSpecifiques = {};
+if (!DATA.apsaCodifiees) DATA.apsaCodifiees = structuredClone(DEFAULT_DATA.apsaCodifiees);
+if (!DATA.apsa) DATA.apsa = {"CA1": ["Autre APSA (Adapté)", "Biathlon", "Biathlon (Adapté)", "Boccia (Adapté)", "Combiné athlétique", "Course Nature", "Courses (Autre)", "Courses Demi Fond", "Courses Demi Fond (Adapté)", "Courses Haies", "Courses Haies (Adapté)", "Courses Relais", "Courses Relais (Adapté)", "Cross training", "Cross training (Adapté)", "Hyrox", "Lancer (Adapté)", "Lancers", "Laser Run", "Laser Run (Adapté)", "Marche (Adapté)", "Natation vitesse", "Natation vitesse (Adapté)", "Run & Bike", "Sarbacane (Adapté)", "Sauts", "Sauts (Adapté)", "Triathlon athlétique", "Z Activité adaptée CENS"], "CA2": ["Activités Nautiques", "Biathlon (Adapté)", "Biathlon (CO + Tir à l'arc)", "Canoé Kayak", "Canoé Kayak (Adapté)", "Course d'orientation", "Course d'orientation (Adapté)", "Escalade", "Escalade (Adapté)", "Golf", "Golf (Adapté)", "Sauvetage aquatique", "Sauvetage aquatique (Adapté)", "VTT", "VTT (Adapté)", "Voile", "Voile (Adapté)", "Z Activité adaptée CENS"], "CA3": ["Acrosport", "Acrosport (Adapté)", "Arts du cirque", "Arts du cirque (Adapté)", "Autre APSA (Adapté)", "Danse(s)", "Danse(s) (Adapté)", "Double Dutch", "Double Dutch (Adapté)", "Gymnastique", "Gymnastique (Adapté)", "Patinage", "Patinage (Adapté)", "Step", "Step (Adapté)"], "CA4": ["Autre APSA (Adapté)", "Badminton", "Badminton (Adapté)", "Badten", "Balle roulée (Adapté)", "Baseball - Thèque", "Basket-ball", "Basket-ball (Adapté)", "Baskin (Adapté)", "Boccia (Adapté)", "Boxe Française", "Football", "Football (Adapté)", "Futsal", "Futsal (Adapté)", "Handball", "Handball (Adapté)", "Judo", "Judo (Adapté)", "Lutte", "Lutte (Adapté)", "Rugby", "Rugby (Adapté)", "Tchoukball", "Tchoukball (Adapté)", "Tennis de table", "Tennis de table (Adapté)", "Ultimate", "Ultimate (Adapté)", "Volley-ball", "Volley-ball (Adapté)"], "CA5": ["Biathlon Longue Durée", "Biathlon Longue Durée (Adapté)", "Course en durée", "Course en durée (Adapté)", "Cross training", "Cross training (Adapté)", "Musculation", "Musculation (Adapté)", "Natation en durée", "Natation en durée (Adapté)", "PPG", "PPG (Adapté)", "Step", "Step (Adapté)", "Yoga", "Yoga (Adapté)"]};
+if (!DATA.intitules) DATA.intitules = structuredClone(DEFAULT_DATA.intitules);
+if (!DATA.nbCommuns) DATA.nbCommuns = {GT:[],BCP:[],CAP:[]};
+
+/* ================== OUTILS ================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(m){ const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2200); }
+
+/* ================== CRITÈRES ================== */
+function bloquants(ex, ca){
+  return [
+    {titre:"Éléments communs", items:(DATA.tousExamens||[])},
+    {titre:"Éléments propres au "+EXAMENS[ex], items:(DATA.communs[ex]||[])},
+    {titre:"Éléments spécifiques au "+ca, items:(DATA.specifiques[ex+"-"+ca]||[])}
+  ];
+}
+
+/* ================== DÉCISION ==================
+   Critère bloquant absent / non conforme       → Non validé
+   Sinon, critère non bloquant à reprendre      → Validé si
+   Sinon                                         → Validé
+   Règle de suivi : référentiel « Validé si » à la session précédente,
+   non modifié (ou partiellement) selon les demandes → reste au moins « Validé si ».
+================================================== */
+function evaluate(){
+  if (!cur.examen || !cur.ca) return null;
+  const bl=[], nb=[]; let nBl=0, nNb=0, vuBl=0, vuNb=0;
+  listes().forEach(sec=>sec.items.forEach(x=>{
+    const f=cur.flags[x.key], o={c:x.c, com:cur.comments[x.key]};
+    if (sec.part==="A"){ nBl++; if(f) vuBl++; if(f==="ko") bl.push(o); }
+    else { nNb++; if(f) vuNb++; if(f==="ko") nb.push(o); }
+  }));
+  let statut = bl.length ? "nv" : nb.length ? "vsc" : "v";
+  const p = cur.prev;
+  let suivi = null;
+  if (p.statut==="vsc" && (p.modifie==="non" || p.modifie==="partiel")){
+    suivi = p.modifie;
+    if (statut==="v") statut="vsc";
+  }
+  return {bl, nb, statut, suivi, nBl, nNb, vuBl, vuNb};
+}
+const LIB = {nv:"Non validé", vsc:"Validé si", v:"Validé"};
+
+function avisTexte(e){
+  const T = DATA.textes;
+  const ligne = x => "- " + (x.com ? x.c[1].replace(/[.\s]+$/,"") + " (constat : " + x.com.trim().replace(/[.\s]+$/,"") + ")." : x.c[1]);
+  const parts = [];
+  if (e.statut==="nv"){
+    parts.push(T.nv, ...e.bl.map(ligne));
+    if (e.nb.length) parts.push(T.nvPlus, ...e.nb.map(ligne));
+  } else if (e.statut==="vsc"){
+    parts.push(T.vsc, ...e.nb.map(ligne));
+  } else {
+    parts.push(T.v);
+  }
+  const entete = cur.ca + (cur.apsa ? " - " + cur.apsa : "");
+  return (entete + " : " + parts.join(" ")).replace(/\s+/g," ").trim();
+}
+
+/* ================== ROUTAGE ================== */
+function route(){
+  const v = location.hash.replace(/^#\/?/, "") || "analyse";
+  document.querySelectorAll("#nav a").forEach(a => a.classList.toggle("on", a.dataset.v===v));
+  ({admin:viewAdmin}[v] || viewAnalyse)();
+}
+window.addEventListener("hashchange", route);
+
+/* ================== ANALYSE (fiche formelle, réponses OUI / NON) ================== */
+const pick = (name, k, lib, on) => `<button type="button" class="pk ${on?"on":""}" data-o="${name}" data-k="${k}" aria-pressed="${on}">${lib}</button>`;
+function listes(){
+  // renvoie [{part:"A"|"B", sub, titre, items:[{key, code, c}]}]
+  const out=[]; let nA=0, nB=0;
+  const afl = cur.examen==="GT" ? "AFL" : "AFLP";
+  const mom = cur.examen==="GT" ? "le jour de l’épreuve" : "en fin de séquence";
+  const R = t => (t||"").replace(/\{AFL\}/g,afl).replace(/\{MOMENT\}/g,mom);
+  const codifOK = c => c[2]!=="codif" || ((DATA.apsaCodifiees||[]).includes(cur.apsa));
+  const T = c => { const r=[R(c[0]), R(c[1])].concat(c.slice(2)); if (c[0].includes("{AFL} reportés")) r.intit=true; return r; };
+  bloquants(cur.examen, cur.ca).filter(s=>s.items.length).forEach((s,i,arr)=>out.push({part:"A", sub:"A."+(i+1), titre:s.titre, spe:s.titre.startsWith("Éléments spécifiques"), items:s.items.filter(codifOK).map(c=>{ const code="B"+(++nA); return {key:"B|"+code, code, c:T(c)}; })}));
+  const nbc = (DATA.nbCommuns||{})[cur.examen]||[];
+  const nbs = DATA.nonBloquants.filter(s=>s.items.length).concat(nbc.length?[{titre:"Éléments propres au "+EXAMENS[cur.examen], items:nbc}]:[]).concat(((DATA.nbSpecifiques||{})[cur.examen+"-"+cur.ca]||[]).length ? [{titre:"Éléments spécifiques au "+cur.ca, items:DATA.nbSpecifiques[cur.examen+"-"+cur.ca], spe:true}] : []);
+  nbs.forEach((s,i)=>out.push({part:"B", sub:"B."+(i+1), titre:s.titre, spe:!!s.spe, items:s.items.filter(codifOK).map(c=>{ const code="NB"+(++nB); return {key:"N|"+code, code, c:T(c)}; })}));
+  return out;
+}
+function viewAnalyse(){
+  const ready = cur.examen && cur.ca;
+  const COLS = `<colgroup><col class="c-n"><col><col class="c-yn"></colgroup>`;
+  const head = `<tr><th>N°</th><th style="text-align:left">Question</th><th>Réponse</th></tr>`;
+  const L = ready ? listes() : [];
+  const table = part => `<table class="check">${COLS}${L.filter(s=>s.part===part).map(s=>`<tr class="sub ${s.spe?"spe":""}"><td colspan="3">${esc(s.titre)}</td></tr>${s.items.map(x=>itemRow(x, part==="A"?"bl":"nb")).join("")}`).join("")}</table>`;
+  const intit = ready ? ((DATA.intitules||{})[cur.examen+"-"+cur.ca]||[]) : [];
+  const afl = cur.examen==="GT" ? "AFL" : "AFLP";
+  $("#app").innerHTML = `
+  <div class="bar" data-ca="${cur.ca||""}">
+    <div class="choice"><span class="bl-lbl">Choix 1 :</span><div class="pks">${Object.entries(EXAMENS).map(([k,l])=>pick("examen",k,l,cur.examen===k)).join("")}</div></div>
+    <div class="choice"><span class="bl-lbl">Choix 2 :</span><div class="pks">${Object.keys(CAS).map(k=>pick("ca",k,k,cur.ca===k)).join("")}</div>
+    ${cur.ca?`<span class="ca-lib">${esc(CAS[cur.ca])}</span>`:""}</div>
+    <div class="choice"><span class="bl-lbl">Choix 3 :</span>
+      <select id="apsaSel" class="sel" ${cur.ca?"":"disabled"} aria-label="APSA">
+        <option value="">${cur.ca?"Choisir l’APSA…":"Choisir d’abord le CA"}</option>
+        ${cur.ca?((DATA.apsa||{})[cur.ca]||[]).map(a=>`<option ${cur.apsa===a?"selected":""}>${esc(a)}</option>`).join(""):""}
+      </select></div>
+  </div>
+  ${!ready ? `<div class="empty">Faites le choix 1 (examen) et le choix 2 (champ d’apprentissage).</div>` : `
+  <div class="one" data-ca="${cur.ca}">
+    <section class="col">
+      <div class="part">Critères bloquants<span class="prog" id="progB"></span></div>
+      ${table("A")}
+    </section>
+    <section class="col">
+      <div class="part">Critères non bloquants<span class="prog" id="progN"></span></div>
+      ${table("B")}
+    </section>
+    <div id="side"></div>
+  </div>`}`;
+  bind();
+  renderSide();
+}
+const ITEMS = {};
+function intitHTML(){
+  const afl = cur.examen==="GT" ? "AFL" : "AFLP";
+  const L = (DATA.intitules||{})[cur.examen+"-"+cur.ca]||[];
+  return `<button type="button" class="chip-btn" data-intit aria-expanded="${!!cur.showIntit}">${cur.showIntit?"Masquer":"Vérifier"} les intitulés ${afl}</button>
+  ${cur.showIntit?`<div class="intit" data-ca="${cur.ca}"><div class="intit-h">Intitulés officiels des ${afl} — ${EXAMENS[cur.examen]} ${cur.ca}</div>
+    <table>${L.map(x=>`<tr><th>${esc(x[0])}</th><td>${x[1]?esc(x[1]):`<i class="muted">non renseigné</i>`}</td></tr>`).join("")}</table>
+    <div class="intit-src">Source : programme d’EPS ${cur.examen==="GT"?"du lycée général et technologique (BO spécial n°1 du 22 janvier 2019)":"de la voie professionnelle, "+(cur.examen==="CAP"?"AFLP CAP":"AFLP BAC PRO")+" (BO spécial n°5 du 11 avril 2019)"}</div></div>`:""}`;
+}
+function itemRow(x, typ){
+  ITEMS[x.key] = {x, typ};
+  const f = cur.flags[x.key]||""; const c = cur.comments[x.key]||"";
+  const inv = x.c[2]==="inv";
+  const vOui = inv?"ko":"ok", vNon = inv?"ok":"ko";
+  const cls = v => v==="ok" ? "y" : "nn "+typ;
+  return `<tr class="it ${f} ${typ}" data-k="${x.key}">
+    <td class="n">${x.code}</td>
+    <td class="crit"><div class="lib">${esc(x.c[0])}${inv?` <span class="inv">OUI = à corriger</span>`:""}</div>${x.c.intit?intitHTML():""}</td>
+    <td class="yn"><div class="ynw"><button type="button" class="${cls(vOui)} ${f===vOui?"on":""}" data-v="${vOui}" aria-pressed="${f===vOui}">OUI</button><button type="button" class="${cls(vNon)} ${f===vNon?"on":""}" data-v="${vNon}" aria-pressed="${f===vNon}">NON</button></div></td>
+  </tr>`;
+}
+function setOpt(name, k){
+  if (name==="examen" && cur.examen!==k){ cur.examen=k; cur.flags={}; cur.comments={}; }
+  else if (name==="ca" && cur.ca!==k){ cur.ca=k; cur.apsa=""; cur.flags={}; cur.comments={}; }
+  cur.avisEdite=null; viewAnalyse();
+}
+function bind(){
+
+  document.querySelectorAll(".pk").forEach(o=>o.onclick=()=>setOpt(o.dataset.o, o.dataset.k));
+  const as=$("#apsaSel"); if(as) as.onchange=()=>{ const before=(DATA.apsaCodifiees||[]).includes(cur.apsa); cur.apsa=as.value; cur.avisEdite=null; const after=(DATA.apsaCodifiees||[]).includes(cur.apsa); if(before!==after){ Object.keys(cur.flags).forEach(k=>{ if(k.startsWith("N|")) delete cur.flags[k]; }); viewAnalyse(); } else renderSide(); };
+  document.querySelectorAll("tr.it").forEach(bindItem);
+}
+function bindItem(tr){
+  const k = tr.dataset.k;
+  tr.querySelectorAll(".ynw button").forEach(bt=>bt.onclick=ev=>{
+    ev.preventDefault();
+    if (cur.flags[k]===bt.dataset.v) return;        // un 2e clic (ou double-clic) ne désélectionne plus
+    cur.flags[k] = bt.dataset.v;
+    if (cur.flags[k]!=="ko") delete cur.comments[k];
+    cur.avisEdite=null;
+    // mise à jour sur place, sans recréer la ligne
+    tr.classList.remove("ok","ko"); tr.classList.add(cur.flags[k]);
+    tr.querySelectorAll(".ynw button").forEach(x=>{ const on = x.dataset.v===cur.flags[k]; x.classList.toggle("on",on); x.setAttribute("aria-pressed",on); });
+    renderSide();
+  });
+  const ib=tr.querySelector("[data-intit]"); if(ib) ib.onclick=()=>{ cur.showIntit=!cur.showIntit; const it=ITEMS[k]; const tmp=document.createElement("tbody"); tmp.innerHTML=itemRow(it.x,it.typ); const n=tmp.firstElementChild; tr.replaceWith(n); bindItem(n); };
+}
+function renderSide(){
+  const side=$("#side"); if(!side) return;
+  const e = evaluate();
+  if (!e){ side.innerHTML=""; return; }
+  const pb=$("#progB"), pn=$("#progN");
+  if(pb) pb.textContent=`${e.vuBl}/${e.nBl} réponses`; if(pn) pn.textContent=`${e.vuNb}/${e.nNb} réponses`;
+  const texte = cur.avisEdite ?? avisTexte(e);
+  const reste = (e.nBl-e.vuBl)+(e.nNb-e.vuNb);
+  if (reste){ side.innerHTML = `<div class="pending">Encore <b>${reste}</b> question${reste>1?"s":""} sans réponse : la décision de la commission s’affichera ici lorsque toutes les questions auront été renseignées.</div>`; return; }
+  side.innerHTML = `
+  <div class="decision">
+    <div class="part">Décision de la commission</div>
+    <div class="dgrid ${e.statut==="v"?"solo":""}">
+    <div>
+    <div class="verdict ${e.statut}">${LIB[e.statut]}</div>
+    <table class="recap">
+      <tr><td>Critères bloquants : réponses NON</td><td class="num" style="color:var(--nv)">${e.bl.length}</td></tr>
+      <tr><td>Critères non bloquants : réponses NON</td><td class="num" style="color:var(--vsc)">${e.nb.length}</td></tr>
+    </table>
+    </div>
+    ${e.statut!=="v"?`<div><div class="sublbl">Proposition de commentaire</div>
+    <div class="boxed">
+      <textarea id="avis" aria-label="Proposition de commentaire">${esc(texte)}</textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn pri" id="copy">Copier le commentaire</button>
+        ${cur.avisEdite!=null?`<button class="btn sm" id="regen">Régénérer</button>`:""}
+      </div>
+    </div></div>`:""}
+    </div>
+  </div>`;
+  if (e.statut==="v") return;
+  $("#avis").oninput = ev => { cur.avisEdite = ev.target.value; };
+  $("#copy").onclick = () => copier($("#avis").value);
+  const rg=$("#regen"); if(rg) rg.onclick=()=>{ cur.avisEdite=null; renderSide(); };
+}
+function copier(t){
+  const ok = () => toast("Commentaire copié dans le presse-papiers");
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(t).then(ok).catch(()=>fallback(t,ok));
+  else fallback(t,ok);
+}
+function fallback(t, ok){
+  const ta=document.createElement("textarea"); ta.value=t; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); ok(); }catch(e){ toast("Copie impossible : sélectionnez le texte manuellement"); }
+  ta.remove();
+}
+
+/* ================== ADMINISTRATION ================== */
+let admEx="BCP", admCa="CA1";
+function critEditor(id, arr, titre){
+  return `<div class="ed" data-ed="${id}">
+    <div class="part" style="margin:14px 0 0">${esc(titre)}<span class="prog">${arr.length} question(s)</span></div>
+    <table class="check adm"><colgroup><col class="c-n"><col><col><col class="c-act"></colgroup>
+      <tr><th>N°</th><th style="text-align:left">Question (OUI = conforme)</th><th style="text-align:left">Demande formulée dans l’avis si NON</th><th>Actions</th></tr>
+      ${arr.map((c,i)=>`<tr data-i="${i}">
+        <td class="n">${i+1}</td>
+        <td><textarea class="q" rows="2">${esc(c[0])}</textarea></td>
+        <td><textarea class="d" rows="2">${esc(c[1])}</textarea></td>
+        <td class="act"><button class="btn sm" data-mv="-1" title="Monter" ${i===0?"disabled":""}>▲</button><button class="btn sm" data-mv="1" title="Descendre" ${i===arr.length-1?"disabled":""}>▼</button><button class="btn sm" data-inv title="Inverser la réponse attendue">${c[2]==="inv"?"OUI = à corriger":"OUI = conforme"}</button><button class="btn sm danger" data-del title="Supprimer">Supprimer</button></td>
+      </tr>`).join("")}
+      <tr class="add"><td class="n">+</td><td><textarea class="q" rows="2" placeholder="Nouvelle question fermée…"></textarea></td><td><textarea class="d" rows="2" placeholder="Demande à formuler si la réponse est NON…"></textarea></td><td class="act"><button class="btn sm pri" data-add>Ajouter</button></td></tr>
+    </table></div>`;
+}
+function admGet(id){
+  if (id==="tous") return DATA.tousExamens = (DATA.tousExamens||[]).map(c=>c.slice());
+  if (id==="com") return DATA.communs[admEx] = (DATA.communs[admEx]||[]).map(c=>c.slice());
+  if (id==="spe") return DATA.specifiques[admEx+"-"+admCa] = (DATA.specifiques[admEx+"-"+admCa]||[]).map(c=>c.slice());
+  if (id==="nbc"){ DATA.nbCommuns=DATA.nbCommuns||{}; return DATA.nbCommuns[admEx] = (DATA.nbCommuns[admEx]||[]).map(c=>c.slice()); }
+  if (id==="nbs"){ DATA.nbSpecifiques=DATA.nbSpecifiques||{}; return DATA.nbSpecifiques[admEx+"-"+admCa] = (DATA.nbSpecifiques[admEx+"-"+admCa]||[]).map(c=>c.slice()); }
+  const i=+id.slice(2); return DATA.nonBloquants[i].items = DATA.nonBloquants[i].items.map(c=>c.slice());
+}
+function viewAdmin(){
+  $("#app").innerHTML = `
+  <div class="sheet"><h2 class="h">Administration des critères</h2>
+    <p class="muted">Chaque critère est une question fermée : la réponse <b>OUI</b> signifie que le critère est respecté. La demande est le texte repris dans l’avis lorsque la réponse est NON. Les critères sont enregistrés sur cet appareil ; exportez-les pour les transmettre aux autres membres de la commission.</p>
+    <div class="row">
+      <button class="btn" id="exp">Exporter les critères</button>
+      <label class="btn" style="margin:0">Importer des critères<input type="file" accept=".json" hidden id="imp"></label>
+      <button class="btn danger" id="rst">Revenir aux critères d’origine</button>
+    </div>
+  </div>
+  <div class="sheet"><h2 class="h">Partie A — Critères bloquants</h2>
+    ${critEditor("tous", DATA.tousExamens||[], "Éléments communs (tous examens) — {AFL} et {MOMENT} s’adaptent à l’examen")}
+    <div class="pick" id="aEx" style="margin-top:16px">${Object.entries(EXAMENS).map(([k,l])=>`<button data-k="${k}" class="${admEx===k?"on":""}">${l}</button>`).join("")}</div>
+    ${critEditor("com", DATA.communs[admEx]||[], "Éléments propres au "+EXAMENS[admEx])}
+    <div class="pick small" id="aCa" style="margin-top:16px">${Object.keys(CAS).map(k=>`<button data-k="${k}" class="${admCa===k?"on":""}">${k}</button>`).join("")}</div>
+    ${critEditor("spe", DATA.specifiques[admEx+"-"+admCa]||[], "Éléments spécifiques — "+EXAMENS[admEx]+" "+admCa)}
+  </div>
+  <div class="sheet"><h2 class="h">Partie B — Critères non bloquants</h2>
+    ${DATA.nonBloquants.map((s,i)=>critEditor("nb"+i, s.items, s.titre+" (tous examens)")).join("")}
+    ${critEditor("nbc", (DATA.nbCommuns||{})[admEx]||[], "Éléments propres au "+EXAMENS[admEx]+" (choisir l’examen ci-dessus)")}
+    ${critEditor("nbs", (DATA.nbSpecifiques||{})[admEx+"-"+admCa]||[], "Éléments spécifiques — "+EXAMENS[admEx]+" "+admCa+" (choisir l’examen et le CA en partie A)")}
+  </div>
+  <div class="sheet"><h2 class="h">Liste des APSA — ${admCa}</h2>
+    <p class="muted">Une APSA par ligne. Choisir le CA ci-dessus.</p>
+    <textarea id="tApsa" rows="8">${esc(((DATA.apsa||{})[admCa]||[]).join("\n"))}</textarea>
+  </div>
+  <div class="sheet"><h2 class="h">APSA codifiées (CA3)</h2>
+    <p class="muted">Une APSA par ligne, écrite comme dans la liste des APSA. Les questions marquées « APSA codifiée » n’apparaissent que pour ces APSA.</p>
+    <textarea id="tCodif" rows="5">${esc((DATA.apsaCodifiees||[]).join("\n"))}</textarea>
+  </div>
+  <div class="sheet"><h2 class="h">Intitulés officiels (bouton « Vérifier les intitulés ») — ${esc(EXAMENS[admEx])} ${admCa}</h2>
+    <p class="muted">Copier les intitulés exacts depuis le texte officiel (programme d’EPS). Choisir l’examen et le CA en partie A.</p>
+    <table class="check adm"><colgroup><col style="width:90px"><col></colgroup>
+      ${((DATA.intitules||{})[admEx+"-"+admCa]||[]).map((x,i)=>`<tr><td class="n">${esc(x[0])}</td><td><textarea data-int="${i}" rows="2">${esc(x[1])}</textarea></td></tr>`).join("")}
+    </table>
+  </div>
+  <div class="sheet"><h2 class="h">Phrases de l’avis</h2>
+    ${Object.entries({nv:"Non validé — introduction",nvPlus:"Non validé — points non bloquants",vsc:"Validé si — introduction",v:"Validé",suivi:"Ancien « validé si » non modifié",suiviPartiel:"Ancien « validé si » partiellement modifié"}).map(([k,l])=>`<h3 class="sec">${l}</h3><textarea data-tx="${k}" rows="2">${esc(DATA.textes[k])}</textarea>`).join("")}
+  </div>`;
+  const ok=m=>{ saveData(); toast(m||"Enregistré"); };
+  document.querySelectorAll("#aEx button").forEach(b=>b.onclick=()=>{ admEx=b.dataset.k; viewAdmin(); });
+  document.querySelectorAll("#aCa button").forEach(b=>b.onclick=()=>{ admCa=b.dataset.k; viewAdmin(); });
+  document.querySelectorAll(".ed").forEach(ed=>{
+    const id=ed.dataset.ed;
+    ed.querySelectorAll("tr[data-i]").forEach(tr=>{
+      const i=+tr.dataset.i;
+      tr.querySelector(".q").onchange=e=>{ const a=admGet(id); if(!e.target.value.trim()) return toast("La question ne peut pas être vide"); a[i][0]=e.target.value.trim(); ok(); };
+      tr.querySelector(".d").onchange=e=>{ const a=admGet(id); a[i][1]=e.target.value.trim()||a[i][0]; ok(); };
+      tr.querySelector("[data-inv]").onclick=()=>{ const a=admGet(id); if(a[i][2]==="inv") a[i].length=2; else a[i][2]="inv"; ok("Réponse attendue inversée"); viewAdmin(); };
+      tr.querySelector("[data-del]").onclick=()=>{ if(!confirm("Supprimer cette question ?")) return; const a=admGet(id); a.splice(i,1); ok("Question supprimée"); viewAdmin(); };
+      tr.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{ const a=admGet(id); const j=i+(+b.dataset.mv); [a[i],a[j]]=[a[j],a[i]]; ok("Ordre modifié"); viewAdmin(); });
+    });
+    const add=ed.querySelector("tr.add");
+    add.querySelector("[data-add]").onclick=()=>{
+      const q=add.querySelector(".q").value.trim(), d=add.querySelector(".d").value.trim();
+      if(!q) return toast("Saisissez la question");
+      if(!/\?\s*(\(.*\))?$/.test(q)) toast("Conseil : formulez une question fermée se terminant par « ? »");
+      admGet(id).push([q, d||q]); ok("Question ajoutée"); viewAdmin();
+    };
+  });
+  const tc=$("#tCodif"); if(tc) tc.onchange=()=>{ DATA.apsaCodifiees=tc.value.split("\n").map(x=>x.trim()).filter(Boolean); ok(); };
+  const ta=$("#tApsa"); if(ta) ta.onchange=()=>{ DATA.apsa=DATA.apsa||{}; DATA.apsa[admCa]=ta.value.split("\n").map(x=>x.trim()).filter(Boolean); ok(); };
+  document.querySelectorAll("[data-int]").forEach(t=>t.onchange=()=>{ DATA.intitules[admEx+"-"+admCa][+t.dataset.int][1]=t.value.trim(); ok(); });
+  document.querySelectorAll("[data-tx]").forEach(t=>t.onchange=()=>{ DATA.textes[t.dataset.tx]=t.value.trim(); ok(); });
+  $("#exp").onclick=()=>{ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify({type:"vref-data",data:DATA},null,1)],{type:"application/json"})); a.download="vref-criteres.json"; a.click(); };
+  $("#imp").onchange=e=>{ const f=e.target.files[0]; if(!f) return; f.text().then(t=>{ const d=JSON.parse(t); if(d.type!=="vref-data") throw 0; DATA=d.data; saveData(); viewAdmin(); toast("Critères importés"); }).catch(()=>toast("Fichier non reconnu")); };
+  $("#rst").onclick=()=>{ if(confirm("Revenir aux critères d’origine ? Vos ajouts et suppressions seront perdus.")){ DATA=structuredClone(DEFAULT_DATA); saveData(); viewAdmin(); toast("Critères réinitialisés"); } };
+}
+
+/* ================== DÉMARRAGE ================== */
+$("#reset").onclick = () => { if(confirm("Effacer l’analyse en cours et en commencer une nouvelle ?")){ cur=blank(); if(location.hash && location.hash!=="#/") location.hash="#/"; else viewAnalyse(); window.scrollTo(0,0); } };
+route();
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) { window.addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
+</script>
+</body>
+</html>
