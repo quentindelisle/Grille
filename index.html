@@ -337,7 +337,7 @@ const CAS = {
 };
 
 /* Chaque critère = [question fermée (OUI = conforme), demande formulée dans l’avis si NON]
-   Liste validée par la commission (revue du 14/10/2026). */
+   Liste validée par la commission (revue du 14/10/2026, relecture BAC GT du 21/10/2026). */
 const AFL1_4PTS = ["Chaque élément de l’AFL 1 est-il noté sur au moins 4 points ?","Noter chacun des éléments de l’AFL 1 sur au moins 4 points."];
 const ROLE_AU_MOINS_UN = ["L’élève est-il évalué dans au moins un rôle qu’il a choisi ?","Évaluer l’élève dans au moins un rôle qu’il a choisi."];
 const COEF4 = ["Un coefficient de difficulté sur 4 niveaux est-il appliqué ?","Appliquer un coefficient de difficulté sur 4 niveaux."];
@@ -372,24 +372,29 @@ const PRO_CA5 = [
   CARNET,
   ["L’élève peut-il réguler sa charge en fonction de ses ressentis ?","Permettre à l’élève de réguler sa charge en fonction de ses ressentis."]
 ];
+const ROLES_GT_CA1 = ["Le référentiel précise-t-il qu’au moins 1 rôle est évalué parmi deux rôles proposés par l’équipe ?","Préciser que l’élève est évalué dans au moins un rôle, choisi parmi deux rôles proposés par l’équipe."];
+/* Portée d’un critère (4e élément, facultatif) : liste d’examens ou d’examen-CA séparés par des virgules,
+   ex. "GT", "BCP,CAP", "GT-CA1,GT-CA2". Sans portée, le critère s’applique partout. */
 const ROLES_GT = ["Le référentiel précise-t-il qu’au moins 1 rôle est évalué parmi au moins deux rôles proposés par l’équipe ?","Préciser que l’élève est évalué dans au moins un rôle, choisi parmi au moins deux rôles proposés par l’équipe."];
 
 const DEFAULT_DATA = {
-  version: 16,
+  version: 17,
   tousExamens: [
     ["Le référentiel est-il adapté à l’APSA et à l’établissement (pas de copier-coller du référentiel national ou d’un ancien référentiel) ?","Adapter le référentiel à l’APSA et à l’établissement : il ne doit pas être un copier-coller du référentiel national ou d’un ancien référentiel."],
     ["Les {AFL} reportés dans le référentiel correspondent-ils à ceux définis dans le cadre national pour ce CA ?","Reporter dans le référentiel les {AFL} définis dans le cadre national pour ce champ d’apprentissage."],
     ["Le total des points du référentiel est-il égal à 20 ?","Vérifier que le total des points du référentiel est égal à 20."],
-    ["La note se décompose-t-elle en 12 points évalués {MOMENT} et 8 points évalués au fil de la séquence ?","Organiser la notation en 12 points évalués {MOMENT} et 8 points évalués au fil de la séquence."],
-    ["Chaque {AFL} évalué dispose-t-il d’une grille en 4 degrés ?","Construire une grille en 4 degrés pour chaque {AFL} évalué."],
+    ["La note se décompose-t-elle en 12 points évalués {MOMENT} et 8 points évalués au fil de la séquence ?","Organiser la notation en 12 points évalués {MOMENT} et 8 points évalués au fil de la séquence.","","BCP,CAP"],
+    ["Le référentiel respecte-t-il la répartition des points spécifiée dans le cadre national pour chaque AFL ?","Respecter la répartition des points spécifiée dans le cadre national pour chaque AFL.","","GT"],
+    ["Chaque {AFL} évalué dispose-t-il d’une grille en 4 degrés ?","Construire une grille en 4 degrés pour chaque {AFL} évalué.","","BCP,CAP"],
     ["La ventilation des points est-elle indiquée dans chaque degré ?","Indiquer la ventilation des points dans chaque degré."],
     ["Les fourchettes de points se suivent-elles sans chevauchement ni trou ?","Corriger les fourchettes de points pour qu’elles se suivent sans chevauchement ni trou."],
-    ["La répartition des 8 points possible entre les deux {AFL} évalués au fil de la séquence est-elle : 2-6 / 4-4 / 6-2 ?","Proposer aux élèves les trois seules répartitions possibles des 8 points : 2-6, 4-4 ou 6-2."]
+    ["La répartition des 8 points possible entre les deux {AFL} évalués au fil de la séquence est-elle : 2-6 / 4-4 / 6-2 ?","Proposer aux élèves les trois seules répartitions possibles des 8 points : 2-6, 4-4 ou 6-2.","","BCP,CAP"],
+    ["La répartition des 8 points possibles entre les deux AFL évalués au fil de la séquence, au choix de l’élève, est-elle : 2-6 / 4-4 / 6-2 ?","Laisser à l’élève le choix entre les trois seules répartitions possibles des 8 points : 2-6, 4-4 ou 6-2.","","GT"]
   ],
   communs: {GT: [], BCP: PRO_COMMUNS.concat([DEGRE_MOITIE]), CAP: PRO_COMMUNS.concat([DEGRE_MOITIE])},
   specifiques: {
     "GT-CA1": [
-      ["L’épreuve comporte-t-elle au moins deux performances maximales mesurées et/ou chronométrées ?","Prévoir au moins deux performances maximales mesurées et/ou chronométrées."],
+      ["L’épreuve, qui peut combiner plusieurs activités, vise-t-elle la recherche d’une performance maximale mesurée et/ou chronométrée ?","Construire une épreuve visant la recherche d’une performance maximale mesurée et/ou chronométrée (plusieurs activités peuvent être combinées)."],
       ["Le barème de performance distingue-t-il filles et garçons ?","Établir un barème de performance distinct filles / garçons."],
       ["Le barème de performance intègre-t-il le seuil médian national (10/20) ?","Caler le barème de performance sur le seuil médian national (10/20)."],
       ["Chaque élément de l’AFL 1 (performance, efficacité technique) est-il noté sur 6 points ?","Noter chacun des éléments de l’AFL 1 (performance, efficacité technique) sur 6 points, conformément au cadre national modifié (BO n°17 du 28 avril 2022)."],
@@ -397,9 +402,8 @@ const DEFAULT_DATA = {
       ["L’efficacité technique est-elle évaluée sur 4 degrés à partir d’indicateurs décrits ?","Évaluer l’efficacité technique sur 4 degrés à partir d’indicateurs décrits."]
     ],
     "GT-CA2": [
-      ["L’élève choisit-il son itinéraire ?","Permettre à l’élève de choisir son itinéraire."],
+      ["L’épreuve offre-t-elle des choix possibles de niveau de difficulté ou de complexité de l’itinéraire ?","Offrir des choix possibles de niveau de difficulté ou de complexité de l’itinéraire."],
       INDIV, FG,
-      ["Une régulation de l’itinéraire est-elle possible ?","Prévoir la possibilité de réguler l’itinéraire."],
       AFL1_4PTS
     ],
     "GT-CA3": [
@@ -407,12 +411,12 @@ const DEFAULT_DATA = {
       AFL1_4PTS
     ],
     "GT-CA4": [OPP, EQUIL,
-      ["Un temps d’analyse est-il prévu entre deux matchs ou séquences de jeu ?","Prévoir un temps d’analyse entre deux matchs ou séquences de jeu."],
-      STRAT,
+      ["Pour chaque rencontre, un temps d’analyse est-il prévu entre deux séquences de jeu pour permettre aux élèves d’ajuster leur stratégie au contexte d’opposition ?","Prévoir, pour chaque rencontre, un temps d’analyse entre deux séquences de jeu permettant aux élèves d’ajuster leur stratégie au contexte d’opposition."],
       AFL1_4PTS
     ],
     "GT-CA5": [
-      ["L’élève choisit-il un mobile ou un projet personnel ?","Permettre à l’élève de choisir un mobile ou un projet personnel."],
+      ["L’élève choisit-il un thème d’entraînement motivé par le choix d’un projet personnel ?","Permettre à l’élève de choisir un thème d’entraînement motivé par le choix d’un projet personnel."],
+      ["L’épreuve s’appuie-t-elle sur la production d’une séance d’entraînement par l’élève ?","Faire reposer l’épreuve sur la production d’une séance d’entraînement par l’élève."],
       CARNET,
       ["Les paramètres de charge (volume, durée, intensité, récupération) sont-ils explicités ?","Expliciter les paramètres de charge (volume, durée, intensité, récupération)."],
       ["L’épreuve alterne-t-elle temps de travail, de récupération et d’analyse ?","Organiser l’alternance de temps de travail, de récupération et d’analyse."],
@@ -431,21 +435,28 @@ const DEFAULT_DATA = {
   },
   nonBloquants: [
     {titre:"Description de l’épreuve", items:[
-      ["Le descriptif de l’épreuve est-il suffisamment détaillé pour comprendre l’épreuve dans son ensemble ?","Détailler le descriptif de l’épreuve pour permettre de la comprendre dans son ensemble."]]},
+      ["Le descriptif de l’épreuve est-il suffisamment détaillé pour comprendre l’épreuve dans son ensemble ?","Détailler le descriptif de l’épreuve pour permettre de la comprendre dans son ensemble.","","BCP,CAP,GT-CA1,GT-CA2,GT-CA4,GT-CA5"],
+      ["Le descriptif de l’épreuve est-il suffisamment détaillé pour comprendre l’épreuve dans son ensemble (espace, durée minimale et maximale, tenue, environnement sonore, éléments scénographiques, nombre d’élèves par groupe, etc.) ?","Détailler le descriptif de l’épreuve pour permettre de la comprendre dans son ensemble (espace, durée minimale et maximale, tenue, environnement sonore, éléments scénographiques, nombre d’élèves par groupe, etc.).","","GT-CA3"],
+      ["L’épreuve se déroule-t-elle dans le cadre d’une durée, d’une distance ou d’espaces définis ?","Définir le cadre de l’épreuve : durée, distance ou espaces.","","GT-CA2"],
+      ["Une ou des possibilités de régulation de l’itinéraire sont-elles prévues ?","Prévoir une ou des possibilités de régulation de l’itinéraire.","","GT-CA2"]]},
     {titre:"Critères d’évaluation", items:[
-      ["Chaque degré est-il décrit par des indicateurs observables (actions ou résultats mesurables) ?","Décrire chaque degré par des indicateurs observables (actions ou résultats mesurables)."],
-      ["Chaque élément évalué est-il renseigné dans les 4 degrés (aucune case vide) ?","Renseigner chaque élément évalué dans les 4 degrés."]]}
+      ["Chaque degré est-il décrit par des indicateurs observables (actions ou résultats mesurables) ?","Décrire chaque degré par des indicateurs observables (actions ou résultats mesurables).","","BCP,CAP,GT-CA5"],
+      ["Chaque degré est-il décrit par des indicateurs ou des conduites d’élèves observables ?","Décrire chaque degré par des indicateurs ou des conduites d’élèves observables.","","GT-CA1,GT-CA2,GT-CA3,GT-CA4"],
+      ["Chaque élément évalué est-il renseigné dans les 4 degrés (aucune case vide) ?","Renseigner chaque élément évalué dans les 4 degrés.","","BCP,CAP"]]}
   ],
   intitules: {"CAP-CA1": [["AFLP 1", "Produire et répartir intentionnellement ses efforts en mobilisant ses ressources pour gagner ou pour battre un record."], ["AFLP 2", "Connaître et utiliser des techniques efficaces pour produire la meilleure performance possible."], ["AFLP 3", "S’engager et persévérer, seul ou à plusieurs, dans des efforts répétés pour progresser dans une activité de performance."], ["AFLP 4", "S’impliquer dans des rôles sociaux pour assurer le bon déroulement d’une épreuve de production de performance."], ["AFLP 5", "Se préparer à un effort long ou intense pour être efficace dans la production d’une performance à une échéance donnée."], ["AFLP 6", "Identifier ses progrès et connaître sa meilleure performance réalisée pour la situer culturellement."]], "BCP-CA1": [["AFLP 1", "Produire et répartir lucidement ses efforts en mobilisant de façon optimale ses ressources pour gagner ou pour battre un record."], ["AFLP 2", "Connaître et mobiliser les techniques efficaces pour produire la meilleure performance possible."], ["AFLP 3", "Analyser sa performance pour adapter son projet et progresser."], ["AFLP 4", "Assumer des rôles sociaux pour organiser une épreuve de production de performance, un concours."], ["AFLP 5", "Assurer la prise en charge de sa préparation et de celle d’un groupe, de façon autonome pour produire la meilleure performance possible."], ["AFLP 6", "Connaître son niveau pour établir un projet de performance située culturellement."]], "CAP-CA2": [["AFLP 1", "Planifier et conduire un déplacement adapté à ses ressources pour effectuer le trajet prévu dans sa totalité ; le cas échéant, savoir renoncer."], ["AFLP 2", "Utiliser des techniques efficaces pour adapter son déplacement aux caractéristiques du milieu."], ["AFLP 3", "Sélectionner des informations utiles pour planifier son itinéraire et l’adapter éventuellement en cours de déplacement."], ["AFLP 4", "S’impliquer dans des rôles sociaux pour assurer le bon fonctionnement d’une activité de pleine nature."], ["AFLP 5", "Contrôler ses émotions pour accepter de s’engager dans un environnement partiellement connu."], ["AFLP 6", "Se préparer, connaître les risques, respecter la réglementation et appliquer les procédures d’urgence à mettre en œuvre dans les différents environnements de pratique pour s’y engager en sécurité."]], "BCP-CA2": [["AFLP 1", "Anticiper et planifier son itinéraire pour concevoir et conduire dans sa totalité un projet de déplacement."], ["AFLP 2", "Mobiliser des techniques efficaces pour adapter et optimiser son déplacement aux caractéristiques du milieu."], ["AFLP 3", "Analyser sa prestation pour comprendre les alternatives possibles et ajuster son projet en fonction de ses ressources et de celles du milieu."], ["AFLP 4", "Assumer les rôles sociaux pour organiser la pratique des activités de pleine nature."], ["AFLP 5", "Se préparer et maintenir un engagement optimal permettant de garder sa lucidité tout au long de son parcours pour pouvoir réévaluer son itinéraire ou renoncer le cas échéant."], ["AFLP 6", "Respecter et faire respecter la réglementation et les procédures d’urgence pour les mettre en œuvre dans les différents environnements de pratique."]], "CAP-CA3": [["AFLP 1", "S’engager devant des spectateurs ou des juges pour produire ou reproduire des formes corporelles maîtrisées au service d’une intention."], ["AFLP 2", "Utiliser des techniques efficaces pour enrichir sa motricité, la rendre plus originale, plus efficace au service de la prestation prévue."], ["AFLP 3", "Prévoir et mémoriser le déroulement des temps forts et des temps faibles de sa prestation pour la réaliser dans son intégralité en restant concentré."], ["AFLP 4", "Utiliser des critères explicites pour apprécier et/ou évaluer la prestation indépendamment de la personne."], ["AFLP 5", "Se préparer pour présenter une prestation complète, maîtrisée et sécurisée à une échéance donnée."], ["AFLP 6", "S’enrichir d’éléments de culture liés à la pratique abordée pour éveiller une curiosité culturelle."]], "BCP-CA3": [["AFLP 1", "Accomplir une prestation animée d’une intention dans la perspective d’être jugé et/ou apprécié."], ["AFLP 2", "Mobiliser des techniques de plus en plus complexes pour rendre plus fluide la prestation et pour l’enrichir de formes corporelles variées et maîtrisées."], ["AFLP 3", "Composer et organiser dans le temps et l’espace le déroulement des moments forts et faibles de sa prestation pour se produire devant des spectateurs/juges."], ["AFLP 4", "Assumer les rôles inhérents à la pratique artistique et acrobatique notamment en exprimant et en écoutant des arguments sur la base de critères partagés, pour situer une prestation."], ["AFLP 5", "Se préparer et s’engager pour présenter une prestation optimale et sécurisée à une échéance donnée."], ["AFLP 6", "S’enrichir de la connaissance de productions de qualité issues du patrimoine culturel artistique et gymnique pour progresser dans sa propre pratique et aiguiser son regard de spectateur."]], "CAP-CA4": [["AFLP 1", "Identifier le déséquilibre adverse et en profiter pour produire rapidement l’action décisive choisie et marquer le point."], ["AFLP 2", "Utiliser des techniques et des tactiques d’attaque adaptées pour favoriser des occasions de marquer et mobiliser des moyens de défense pour s’opposer."], ["AFLP 3", "Persévérer face à la difficulté et accepter la répétition pour améliorer son efficacité motrice."], ["AFLP 4", "Terminer la rencontre et accepter la défaite ou la victoire dans le respect de l’adversaire ; intégrer les règles et s’impliquer dans les rôles sociaux pour permettre le bon déroulement du jeu."], ["AFLP 5", "Se préparer et systématiser sa préparation générale et spécifique pour être en pleine possession de ses moyens lors de la confrontation."], ["AFLP 6", "Connaître les pratiques sportives dans la société contemporaine pour situer et comprendre le sens des pratiques scolaires."]], "BCP-CA4": [["AFLP 1", "Réaliser des choix tactiques et stratégiques pour faire basculer le rapport de force en sa faveur et marquer le point."], ["AFLP 2", "Mobiliser des techniques d’attaque efficaces pour se créer et exploiter des occasions de marquer ; résister et neutraliser individuellement ou collectivement l’attaque adverse pour rééquilibrer le rapport de force."], ["AFLP 3", "Analyser les forces et les faiblesses en présence par l’exploitation de données objectives pour faire des choix tactiques et stratégiques adaptés à une prochaine confrontation."], ["AFLP 4", "Respecter et faire respecter les règles partagées pour que le jeu puisse se dérouler sereinement ; assumer plusieurs rôles sociaux pour permettre le bon déroulement du jeu."], ["AFLP 5", "Savoir se préparer, s’entraîner et récupérer pour faire preuve d’autonomie."], ["AFLP 6", "Porter un regard critique sur les pratiques sportives pour comprendre le sens des pratiques scolaires."]], "CAP-CA5": [["AFLP 1", "Construire et stabiliser une motricité spécifique pour être efficace dans le suivi d’un thème d’entraînement en cohérence avec un mobile personnel de développement."], ["AFLP 2", "Mettre en lien des ressentis avec une charge de travail pour réguler cette charge de manière autonome."], ["AFLP 3", "Mobiliser différentes méthodes d’entraînement, analyser ses ressentis pour fonder ses choix."], ["AFLP 4", "Coopérer et assurer les rôles sociaux pour aider au progrès individuel dans des conditions de sécurité."], ["AFLP 5", "S’engager avec une intensité ciblée et persévérer dans l’effort pour envisager des progrès."], ["AFLP 6", "Intégrer des conseils d’entraînement, de diététique, d’hygiène de vie pour se construire un mode de vie sain et une pratique raisonnée."]], "BCP-CA5": [["AFLP 1", "Concevoir et mettre en œuvre un projet d’entraînement pour répondre à un mobile personnel de développement."], ["AFLP 2", "Éprouver différentes méthodes d’entraînement et en identifier les principes pour les réutiliser dans sa séance."], ["AFLP 3", "Systématiser un retour réflexif sur sa pratique pour réguler sa charge de travail en fonction d’indicateurs de l’effort (fréquence cardiaque, ressenti musculaire et respiratoire, fatigue générale)."], ["AFLP 4", "Agir avec et pour les autres en vue de la réalisation du projet d’entraînement en assurant spontanément les rôles sociaux."], ["AFLP 5", "Construire une motricité contrôlée pour évoluer dans des conditions de sécurité."], ["AFLP 6", "Intégrer des conseils d’entraînement, de diététique, d’hygiène de vie pour se construire un mode de vie sain et une pratique raisonnée."]], "GT-CA1": [["AFL 1", "S’engager pour produire une performance maximale à l’aide de techniques efficaces, en gérant les efforts musculaires et respiratoires nécessaires et en faisant le meilleur compromis entre l’accroissement de vitesse d’exécution et de précision."], ["AFL 2", "S’entraîner, individuellement et collectivement, pour réaliser une performance."], ["AFL 3", "Choisir et assumer les rôles qui permettent un fonctionnement collectif solidaire."]], "GT-CA2": [["AFL 1", "S’engager à l’aide d’une motricité spécifique pour réaliser en sécurité et à son meilleur niveau, un itinéraire dans un contexte incertain."], ["AFL 2", "S’entraîner individuellement et collectivement, pour se déplacer de manière efficiente et en toute sécurité."], ["AFL 3", "Coopérer pour réaliser un projet de déplacement, en toute sécurité."]], "GT-CA3": [["AFL 1 (APSA à visée esthétique ou acrobatique)", "S’engager pour composer et réaliser un enchaînement à visée esthétique ou acrobatique destiné à être jugé, en combinant des formes corporelles codifiées."], ["AFL 1 (APSA à visée artistique)", "S’engager pour composer et interpréter une chorégraphie collective selon un projet artistique en mobilisant une motricité expressive et des procédés de composition."], ["AFL 2", "Se préparer et s’engager, individuellement et collectivement, pour s’exprimer devant un public et susciter des émotions."], ["AFL 3", "Choisir et assumer des rôles au service de la prestation collective."]], "GT-CA4": [["AFL 1", "S’engager pour gagner une rencontre en faisant des choix techniques et tactiques pertinents au regard de l’analyse du rapport de force."], ["AFL 2", "Se préparer et s’entraîner, individuellement ou collectivement, pour conduire et maîtriser un affrontement collectif ou interindividuel."], ["AFL 3", "Choisir et assumer les rôles qui permettent un fonctionnement collectif solidaire."]], "GT-CA5": [["AFL 1", "S’engager pour obtenir les effets recherchés selon son projet personnel, en faisant des choix de paramètres d’entraînement cohérents avec le thème retenu."], ["AFL 2", "S’entraîner, individuellement ou collectivement, pour développer ses ressources et s’entretenir en fonction des effets recherchés."], ["AFL 3", "Coopérer pour faire progresser."]]},
   apsaCodifiees: ["Acrosport","Acrosport (Adapté)","Gymnastique","Gymnastique (Adapté)","Double Dutch","Double Dutch (Adapté)","Patinage","Patinage (Adapté)"],
   nbCommuns: {GT: [], BCP: [], CAP: []},
   nbSpecifiques: {
     "GT-CA1": [
-      ROLES_GT],
-    "GT-CA2": [["Plusieurs niveaux de difficulté d’itinéraire sont-ils proposés ?","Proposer plusieurs niveaux de difficulté d’itinéraire."], INCERT, COEF4],
-    "GT-CA3": [DEUX_PASSAGES, REGUL_PASSAGES, ["L’espace, la durée mini / maxi, le support sonore et la tenue sont-ils tous définis ?","Définir l’espace, la durée mini / maxi, le support sonore et la tenue."], COEF4, ROLES_GT, ["La difficulté est-elle graduée sur au moins 3 niveaux à partir d’un code de référence ?","S’appuyer sur un code de référence et graduer la difficulté sur au moins 3 niveaux.","codif"]],
+      ROLES_GT_CA1],
+    "GT-CA2": [INCERT, COEF4],
+    "GT-CA3": [
+      ["Pour les activités codifiées, un coefficient de difficulté est-il appliqué dans chacun des degrés pour le 1er élément de l’AFL 1 ?","Appliquer, dans chacun des degrés, un coefficient de difficulté au 1er élément de l’AFL 1.","codif"],
+      ROLES_GT,
+      ["Pour les activités codifiées, les exigences (individuelles et/ou collectives) sont-elles précisées et hiérarchisées selon au moins 3 niveaux ?","Préciser les exigences (individuelles et/ou collectives) et les hiérarchiser selon au moins 3 niveaux.","codif"]],
     "GT-CA4": [
-      ["Le gain des matchs est-il traduit sur 4 niveaux pour ajuster la note de l’AFL 1 ?","Traduire le gain des matchs sur 4 niveaux pour ajuster la note de l’AFL 1."],
+      ["Le gain des matchs permet-il d’ajuster la note de l’AFL 1 dans chacun des 4 degrés ?","Permettre au gain des matchs d’ajuster la note de l’AFL 1 dans chacun des 4 degrés."],
       ROLES_GT],
     "BCP-CA2": [INCERT, PRO_CA2_COEF], "CAP-CA2": [INCERT, PRO_CA2_COEF],
     "BCP-CA3": PRO_CA3_NB, "CAP-CA3": PRO_CA3_NB,
@@ -471,7 +482,7 @@ const blank = () => ({examen:"", ca:"", prev:{statut:"aucun", modifie:"", demand
 let cur = blank(); // aucune trace : l’analyse n’est jamais enregistrée
 const saveData = () => save(K_DATA, DATA);
 /* Migration : la liste des critères a été entièrement revue (v6) : les anciens paramètres sont remplacés */
-if ((DATA.version||0) < 16){ DATA = structuredClone(DEFAULT_DATA); saveData(); }
+if ((DATA.version||0) < 17){ DATA = structuredClone(DEFAULT_DATA); saveData(); }
 if (!DATA.tousExamens) DATA.tousExamens = [];
 if (!DATA.nbSpecifiques) DATA.nbSpecifiques = {};
 if (!DATA.apsaCodifiees) DATA.apsaCodifiees = structuredClone(DEFAULT_DATA.apsaCodifiees);
@@ -551,8 +562,9 @@ function listes(){
   const afl = cur.examen==="GT" ? "AFL" : "AFLP";
   const mom = cur.examen==="GT" ? "le jour de l’épreuve" : "en fin de séquence";
   const R = t => (t||"").replace(/\{AFL\}/g,afl).replace(/\{MOMENT\}/g,mom);
-  const codifOK = c => c[2]!=="codif" || ((DATA.apsaCodifiees||[]).includes(cur.apsa));
-  const T = c => { const r=[R(c[0]), R(c[1])].concat(c.slice(2)); if (c[0].includes("{AFL} reportés")) r.intit=true; return r; };
+  const porteeOK = c => !c[3] || String(c[3]).split(",").map(x=>x.trim()).some(x => x===cur.examen || x===cur.examen+"-"+cur.ca);
+  const codifOK = c => porteeOK(c) && (c[2]!=="codif" || ((DATA.apsaCodifiees||[]).includes(cur.apsa)));
+  const T = c => { const r=[R(c[0]), R(c[1])].concat(c.slice(2,3)); if (c[0].includes("{AFL} reportés")) r.intit=true; return r; };
   bloquants(cur.examen, cur.ca).filter(s=>s.items.length).forEach((s,i,arr)=>out.push({part:"A", sub:"A."+(i+1), titre:s.titre, spe:s.titre.startsWith("Éléments spécifiques"), items:s.items.filter(codifOK).map(c=>{ const code="B"+(++nA); return {key:"B|"+code, code, c:T(c)}; })}));
   const nbc = (DATA.nbCommuns||{})[cur.examen]||[];
   const nbs = DATA.nonBloquants.filter(s=>s.items.length).concat(nbc.length?[{titre:"Éléments propres au "+EXAMENS[cur.examen], items:nbc}]:[]).concat(((DATA.nbSpecifiques||{})[cur.examen+"-"+cur.ca]||[]).length ? [{titre:"Éléments spécifiques au "+cur.ca, items:DATA.nbSpecifiques[cur.examen+"-"+cur.ca], spe:true}] : []);
@@ -695,7 +707,7 @@ function critEditor(id, arr, titre){
       <tr><th>N°</th><th style="text-align:left">Question (OUI = conforme)</th><th style="text-align:left">Demande formulée dans l’avis si NON</th><th>Actions</th></tr>
       ${arr.map((c,i)=>`<tr data-i="${i}">
         <td class="n">${i+1}</td>
-        <td><textarea class="q" rows="2">${esc(c[0])}</textarea></td>
+        <td><textarea class="q" rows="2">${esc(c[0])}</textarea>${c[3]?`<div class="muted" style="font-size:12px">Uniquement : ${esc(String(c[3]).replace(/GT/g,"BAC GT").replace(/BCP/g,"BAC Pro").replace(/,/g,", "))}</div>`:""}</td>
         <td><textarea class="d" rows="2">${esc(c[1])}</textarea></td>
         <td class="act"><button class="btn sm" data-mv="-1" title="Monter" ${i===0?"disabled":""}>▲</button><button class="btn sm" data-mv="1" title="Descendre" ${i===arr.length-1?"disabled":""}>▼</button><button class="btn sm" data-inv title="Inverser la réponse attendue">${c[2]==="inv"?"OUI = à corriger":"OUI = conforme"}</button><button class="btn sm danger" data-del title="Supprimer">Supprimer</button></td>
       </tr>`).join("")}
@@ -758,7 +770,7 @@ function viewAdmin(){
       const i=+tr.dataset.i;
       tr.querySelector(".q").onchange=e=>{ const a=admGet(id); if(!e.target.value.trim()) return toast("La question ne peut pas être vide"); a[i][0]=e.target.value.trim(); ok(); };
       tr.querySelector(".d").onchange=e=>{ const a=admGet(id); a[i][1]=e.target.value.trim()||a[i][0]; ok(); };
-      tr.querySelector("[data-inv]").onclick=()=>{ const a=admGet(id); if(a[i][2]==="inv") a[i].length=2; else a[i][2]="inv"; ok("Réponse attendue inversée"); viewAdmin(); };
+      tr.querySelector("[data-inv]").onclick=()=>{ const a=admGet(id); if(a[i][2]==="inv"){ if(a[i][3]) a[i][2]=""; else a[i].length=2; } else a[i][2]="inv"; ok("Réponse attendue inversée"); viewAdmin(); };
       tr.querySelector("[data-del]").onclick=()=>{ if(!confirm("Supprimer cette question ?")) return; const a=admGet(id); a.splice(i,1); ok("Question supprimée"); viewAdmin(); };
       tr.querySelectorAll("[data-mv]").forEach(b=>b.onclick=()=>{ const a=admGet(id); const j=i+(+b.dataset.mv); [a[i],a[j]]=[a[j],a[i]]; ok("Ordre modifié"); viewAdmin(); });
     });
