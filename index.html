@@ -793,6 +793,26 @@ function viewAdmin(){
 
 /* ================== DÉMARRAGE ================== */
 $("#reset").onclick = () => { if(confirm("Effacer l’analyse en cours et en commencer une nouvelle ?")){ cur=blank(); if(location.hash && location.hash!=="#/") location.hash="#/"; else viewAnalyse(); window.scrollTo(0,0); } };
+/* Lancement depuis CAHPNantes (Commission, feuille de route) : ?examen=GT|BCP|CAP&ca=CA2&apsa=Badminton
+   pré-remplit l’examen, le champ d’apprentissage et l’APSA ; les critères et intitulés correspondants s’affichent aussitôt. */
+(function(){
+  try{
+    const p = new URLSearchParams(location.search);
+    const ex = p.get("examen"), ca = p.get("ca"), ap = p.get("apsa");
+    if (ex && EXAMENS[ex]) {
+      cur.examen = ex;
+      if (ca && CAS[ca]) {
+        cur.ca = ca;
+        if (ap) {
+          const norm = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’']/g,"'").toLowerCase().trim();
+          const m = ((DATA.apsa||{})[ca]||[]).find(a => norm(a) === norm(ap));
+          if (m) cur.apsa = m;
+        }
+      }
+    }
+    if (ex && history.replaceState) history.replaceState(null, "", location.pathname + location.hash);
+  }catch(e){}
+})();
 route();
 if ("serviceWorker" in navigator && location.protocol.startsWith("http")) { window.addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{})); }
 </script>

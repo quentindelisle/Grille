@@ -1,6 +1,6 @@
 // Service worker — Grille d’analyse de référentiel - CCF
 // Changer CACHE à chaque mise à jour du site pour forcer le rafraîchissement.
-const CACHE = "grille-ccf-v2";
+const CACHE = "grille-ccf-v3";
 const FILES = ["./", "index.html", "manifest.webmanifest", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png"];
 
 self.addEventListener("install", e => {
